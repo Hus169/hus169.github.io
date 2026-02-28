@@ -49,8 +49,8 @@
     
     <div class="controls">
         <input type="text" id="search" placeholder="Search by name or playstyle..." onkeyup="filterTable()">
-        <button id="toggleBtn" class="btn btn-toggle" onclick="toggleExpired()">Hide Expired</button>
-    </div>
+        <button id="toggleBtn" class="btn btn-toggle active" onclick="toggleExpired()">Show All</button>
+
 
     <table id="evoTable">
         <thead>
@@ -198,6 +198,7 @@
         });
 
         render();
+        filterTable(); //
     }
 
     function render() {
