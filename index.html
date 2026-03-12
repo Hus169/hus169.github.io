@@ -64,7 +64,7 @@
     <table id="evoTable">
         <thead>
             <tr>
-                <th class="sortable" data-col="name"      style="width: 30%;" onclick="sortBy('name')">Evolution Name</th>
+                <th class="sortable" data-col="name"      style="width: 30%;" onclick="sortBy('name')">Evolution</th>
                 <th class="sortable" data-col="pos"       style="width: 8%;"  onclick="sortBy('pos')">Position</th>
                 <th class="sortable" data-col="maxRating" style="width: 8%;"  onclick="sortBy('maxRating')">Max OVR</th>
                 <th class="sortable" data-col="ps"        onclick="sortBy('ps')">Base Playstyles</th>
@@ -224,7 +224,7 @@
         { name: "Cake & Rash", ps: ["Technical", "Tiki Taka", "Trickster"], plus: ["Quick Step", "Finesse Shot"], exp: false, "expires": "2026-03-15", pos: "ST", maxRating: 89 },  // AUTO-ADDED
         { name: "Trickster Boost", ps: ["Trickster"], plus: [], exp: false, "expires": "2026-03-19", maxRating: 88 },  // AUTO-ADDED
         { name: "Thunder Strike", ps: ["Low Driven Shot", "Power Shot"], plus: [], exp: false, "expires": "2026-03-14", maxRating: 86 },  // AUTO-ADDED
-        { name: "Birthday Warmup", ps: [], plus: [], exp: false, "expires": "2026-03-13", maxRating: 87 },  // AUTO-ADDED
+        { name: "Birthday Warmup", ps: [], plus: [], exp: false, "expires": "2026-03-13T17:37:19Z", maxRating: 87 },  // AUTO-ADDED
         { name: "Fantasy Captain ICON", ps: [], plus: [], exp: false, "expires": "2026-03-13" },  // AUTO-ADDED
         { name: "Set Menu", ps: ["Tiki Taka", "Technical", "Press Proven", "Quick Step"], plus: [], exp: false, "expires": "2026-03-15", maxRating: 87 },  // AUTO-ADDED
         { name: "Inside Edge", ps: ["Low Driven Shot", "Gamechanger", "Technical", "Tiki Taka", "Incisive Pass"], plus: ["Finesse Shot"], exp: false, "expires": "2026-09-08", pos: "RW", maxRating: 87 },  // AUTO-ADDED
@@ -612,7 +612,6 @@
         { name: "The Debut", ps: [], plus: [], exp: true, pos: "GK", maxRating: 82 },  // AUTO-ADDED (expired)
         { name: "Cover Athlete", ps: ["Relentless"], plus: [], exp: true, pos: "CAM", maxRating: 83 },  // AUTO-ADDED (expired)
         { name: "Rising Guard", ps: [], plus: [], exp: true, maxRating: 82 },  // AUTO-ADDED (expired)
-               
     ];
 
     function init() {
@@ -633,17 +632,34 @@
         render();
     }
 
+    function msUntil(isoDate) {
+        if (!isoDate) return NaN;
+        // If it already has a time component, parse directly; otherwise treat as end-of-day UTC
+        const target = /T\d/.test(isoDate)
+            ? new Date(isoDate)
+            : new Date(isoDate + 'T23:59:59Z');
+        const ms = target - Date.now();
+        return isNaN(ms) ? NaN : ms;
+    }
+
     function daysUntil(isoDate) {
-        const msPerDay = 1000 * 60 * 60 * 24;
-        const diff = new Date(isoDate + 'T23:59:59Z') - Date.now();
-        return Math.ceil(diff / msPerDay);
+        return Math.ceil(msUntil(isoDate) / (1000 * 60 * 60 * 24));
     }
 
     function buildExpiryTag(isoDate) {
-        const days = daysUntil(isoDate);
-        if (days < 0)  return '<span class="status-tag">Expired</span>';
-        if (days === 0) return '<span class="expiry-tag expiry-urgent">⏳ Expires today</span>';
-        if (days <= 2)  return `<span class="expiry-tag expiry-urgent">⏳ ${days}d left</span>`;
+        const ms = msUntil(isoDate);
+        if (isNaN(ms) || ms < 0) return '<span class="status-tag">Expired</span>';
+        if (ms < 1000 * 60 * 60 * 24) {
+            // Sub-24h: show hours and minutes
+            const totalMins = Math.ceil(ms / 60000);
+            const hours = Math.floor(totalMins / 60);
+            const mins  = totalMins % 60;
+            if (hours === 0)  return `<span class="expiry-tag expiry-urgent">⏳ ${mins}m left</span>`;
+            if (hours <= 2)   return `<span class="expiry-tag expiry-urgent">⏳ ${hours}h ${mins}m left</span>`;
+            return `<span class="expiry-tag expiry-urgent">⏳ ${hours}h left</span>`;
+        }
+        const days = Math.ceil(ms / (1000 * 60 * 60 * 24));
+        if (days <= 2) return `<span class="expiry-tag expiry-urgent">⏳ ${days}d left</span>`;
         return `<span class="expiry-tag">⏳ ${days}d left</span>`;
     }
 
@@ -700,9 +716,13 @@
         data.sort((a, b) => {
             let av, bv;
             if (col === 'name') {
-                av = (a.name || '').toLowerCase();
-                bv = (b.name || '').toLowerCase();
-                return dir * av.localeCompare(bv);
+                // Sort by expiry date: no-expiry evos go last, expired go after active
+                const getExpiry = e => {
+                    if (e.exp) return 9000000000000;          // expired → always last
+                    if (!e.expires) return 8000000000000;     // no expiry date → second-last
+                    return new Date(e.expires).getTime();
+                };
+                return dir * (getExpiry(a) - getExpiry(b));
             }
             if (col === 'pos') {
                 av = (a.pos || '').toLowerCase();
@@ -756,7 +776,7 @@
         const ratingHTML = evo.maxRating ? `<span class="rating-tag">≤ ${evo.maxRating}</span>` : '<span class="no-data">—</span>';
 
         row.innerHTML = `
-            <td><div class="name-cell"><strong>${evo.name}</strong>${tag ? tag : ''}</div></td>
+            <td><div class="name-cell"><strong>${evo.name}</strong>${tag}</div></td>
             <td>${posHTML}</td>
             <td>${ratingHTML}</td>
             <td><div class="icon-row">${psHTML}</div></td>
