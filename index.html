@@ -23,6 +23,10 @@
         table { width: 100%; border-collapse: collapse; background: #1a1d23; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         th, td { padding: 16px; border-bottom: 1px solid #2d323a; text-align: left; }
         th { background: #252932; color: #00ffcc; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; }
+        th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+        th.sortable:hover { background: #2e3440; color: #fff; }
+        th.sort-asc::after  { content: ' ▲'; font-size: 0.65rem; opacity: 0.9; }
+        th.sort-desc::after { content: ' ▼'; font-size: 0.65rem; opacity: 0.9; }
         
         .expired-row { opacity: 0.35; }
         .active-row { border-left: 4px solid #00ffcc; }
@@ -59,11 +63,11 @@
     <table id="evoTable">
         <thead>
             <tr>
-                <th style="width: 30%;">Evolution Name</th>
-                <th style="width: 8%;">Position</th>
-                <th style="width: 8%;">Max OVR</th>
-                <th>Base Playstyles</th>
-                <th>Playstyles+ (Plus)</th>
+                <th class="sortable" data-col="name"      style="width: 30%;" onclick="sortBy('name')">Evolution Name</th>
+                <th class="sortable" data-col="pos"       style="width: 8%;"  onclick="sortBy('pos')">Position</th>
+                <th class="sortable" data-col="maxRating" style="width: 8%;"  onclick="sortBy('maxRating')">Max OVR</th>
+                <th class="sortable" data-col="ps"        onclick="sortBy('ps')">Base Playstyles</th>
+                <th class="sortable" data-col="plus"      onclick="sortBy('plus')">Playstyles+ (Plus)</th>
             </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -116,6 +120,7 @@
     // Full unique dataset (Active + your complete Expired list)
     const rawData = [
         // ── AUTO-ADDED by sync_evos.py ──
+        { name: "Make Your Idol - Incisive Pass+", ps: [], plus: ["Incisive Pass"], exp: false, "expires": "2026-04-11" },  // AUTO-ADDED
         { name: "Make Your Idol - Tiki Taka+", ps: [], plus: ["Tiki Taka"], exp: false, "expires": "2026-04-11" },  // AUTO-ADDED
         { name: "Make Your Idol - Attacker 1", ps: ["Finesse Shot", "Quick Step"], plus: [], exp: false, "expires": "2026-04-11", maxRating: 85 },  // AUTO-ADDED
         { name: "Make Your Idol - Starter", ps: [], plus: [], exp: false, "expires": "2026-04-11", maxRating: 85 },  // AUTO-ADDED
@@ -579,6 +584,7 @@
         { name: "The Debut", ps: [], plus: [], exp: true, pos: "GK", maxRating: 82 },  // AUTO-ADDED (expired)
         { name: "Cover Athlete", ps: ["Relentless"], plus: [], exp: true, pos: "CAM", maxRating: 83 },  // AUTO-ADDED (expired)
         { name: "Rising Guard", ps: [], plus: [], exp: true, maxRating: 82 },  // AUTO-ADDED (expired)
+        // ── AUTO-ADDED by sync_evos.py ──
                // ── AUTO-ADDED by sync_evos.py ──
         
     ];
@@ -622,7 +628,28 @@
         return false;
     }
 
-    // Order (rawData order preserved within each group — newest synced = top):
+    // Column sort state: { col: null | string, dir: 1 | -1 }
+    // dir 1 = ascending, -1 = descending
+    let sortState = { col: null, dir: 1 };
+
+    function sortBy(col) {
+        if (sortState.col === col) {
+            sortState.dir *= -1;  // toggle direction on second click
+        } else {
+            sortState.col = col;
+            sortState.dir = 1;
+        }
+        // Update header indicators
+        document.querySelectorAll('th.sortable').forEach(th => {
+            th.classList.remove('sort-asc', 'sort-desc');
+            if (th.dataset.col === col) {
+                th.classList.add(sortState.dir === 1 ? 'sort-asc' : 'sort-desc');
+            }
+        });
+        render();
+    }
+
+    // Default order (rawData order preserved within each group — newest synced = top):
     //   1. Normal-named active evos
     //   2. Playstyle-named evos (base + plus variants)
     //   3. Expired evos
@@ -637,7 +664,46 @@
             normal.push(evo);
         });
 
-        return [...normal, ...psGroup, ...expired];
+        let data = [...normal, ...psGroup, ...expired];
+
+        if (!sortState.col) return data;
+
+        const col = sortState.col;
+        const dir = sortState.dir;
+
+        data.sort((a, b) => {
+            let av, bv;
+            if (col === 'name') {
+                av = (a.name || '').toLowerCase();
+                bv = (b.name || '').toLowerCase();
+                return dir * av.localeCompare(bv);
+            }
+            if (col === 'pos') {
+                av = (a.pos || '').toLowerCase();
+                bv = (b.pos || '').toLowerCase();
+                return dir * av.localeCompare(bv);
+            }
+            if (col === 'maxRating') {
+                // nulls always last regardless of sort direction
+                if (!a.maxRating && !b.maxRating) return 0;
+                if (!a.maxRating) return 1;
+                if (!b.maxRating) return -1;
+                return dir * (a.maxRating - b.maxRating);
+            }
+            if (col === 'ps') {
+                av = a.ps.length;
+                bv = b.ps.length;
+                return dir * (av - bv);
+            }
+            if (col === 'plus') {
+                av = a.plus.length;
+                bv = b.plus.length;
+                return dir * (av - bv);
+            }
+            return 0;
+        });
+
+        return data;
     }
 
     function buildRow(evo) {
@@ -716,7 +782,7 @@
     }
 
     init();
-// Add this at the very bottom of your script to press hide all Expired 
+// Press hide all Expired button
 document.getElementById('toggleBtn').click();
 
 
