@@ -36,10 +36,11 @@
         .ps-icon { width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
         .plus-icon { border: 2px solid #ffcc00; border-radius: 6px; background: rgba(255, 204, 0, 0.15); padding: 1px; }
         
-        .status-tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; background: #333; color: #888; margin-left: 10px; font-weight: normal; }
-        .expiry-tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; background: #0f2e1e; color: #00cc88; margin-left: 10px; font-weight: normal; border: 1px solid #00cc8840; }
+        .status-tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; background: #333; color: #888; font-weight: normal; display: inline-block; }
+        .expiry-tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; background: #0f2e1e; color: #00cc88; font-weight: normal; border: 1px solid #00cc8840; display: inline-block; }
         .expiry-urgent { background: #2e1a0f; color: #ff8c42; border-color: #ff8c4240; }
         .no-data { color: #444; font-size: 0.8rem; font-style: italic; }
+        .name-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
         .pos-tag { font-size: 0.75rem; font-weight: 600; color: #a0cfff; background: #0d2040; border: 1px solid #1e4a8040; padding: 2px 8px; border-radius: 4px; }
         .rating-tag { font-size: 0.75rem; font-weight: 600; color: #ffd080; background: #2a1e00; border: 1px solid #6040004a; padding: 2px 8px; border-radius: 4px; }
         
@@ -147,16 +148,15 @@
         { name: "Make Your Idol - Technical+", ps: [], plus: ["Technical"], exp: false, "expires": "2026-04-11" },  // AUTO-ADDED
         { name: "Make Your Idol - Low Driven+", ps: [], plus: ["Low Driven Shot"], exp: false, "expires": "2026-04-11" },  // AUTO-ADDED
         { name: "Make Your Idol - Midfielder 1", ps: ["Incisive Pass", "Press Proven"], plus: [], exp: false, "expires": "2026-04-11", maxRating: 85 },  // AUTO-ADDED
-        // ── AUTO-ADDED by sync_evos.py ──
         { name: "Make Your Idol - Incisive Pass+", ps: [], plus: ["Incisive Pass"], exp: false, "expires": "2026-04-11" },  // AUTO-ADDED
         { name: "Make Your Idol - Tiki Taka+", ps: [], plus: ["Tiki Taka"], exp: false, "expires": "2026-04-11" },  // AUTO-ADDED
         { name: "Make Your Idol - Attacker 1", ps: ["Finesse Shot", "Quick Step"], plus: [], exp: false, "expires": "2026-04-11", maxRating: 85 },  // AUTO-ADDED
         { name: "Make Your Idol - Starter", ps: [], plus: [], exp: false, "expires": "2026-04-11", maxRating: 85 },  // AUTO-ADDED
         { name: "Winger Transformation", ps: [], plus: [], exp: false, "expires": "2026-03-19", maxRating: 89 },  // AUTO-ADDED
-        { name: "Pressure? What Pressure", ps: [], plus: [], exp: false, "expires": "2026-03-17", maxRating: 88 },  // AUTO-ADDED
+        { name: "Pressure? What Pressure", ps: [], plus: [], exp: false, "expires": "2026-03-16", maxRating: 88 },  // AUTO-ADDED
         { name: "Candles & Cramps", ps: ["Block", "Jockey", "Intercept"], plus: ["Quick Step", "Anticipate"], exp: false, "expires": "2026-03-19", pos: "CB", maxRating: 88 },  // AUTO-ADDED
         { name: "5 Star Factory", ps: [], plus: [], exp: false, "expires": "2026-03-26", maxRating: 88 },  // AUTO-ADDED
-        { name: "Prepare for the party", ps: ["Incisive Pass", "Press Proven", "First Touch"], plus: [], exp: false, "expires": "2026-03-19", maxRating: 87 },  // AUTO-ADDED
+        { name: "Prepare for the party", ps: ["Incisive Pass", "Press Proven", "First Touch"], plus: [], exp: false, "expires": "2026-03-18", maxRating: 87 },  // AUTO-ADDED
         { name: "Enforcer+", ps: [], plus: ["Enforcer"], exp: false, "expires": "2027-03-07" },  // AUTO-ADDED
         { name: "Long Throw+", ps: [], plus: ["Long Throw"], exp: false, "expires": "2027-03-07" },  // AUTO-ADDED
         { name: "Quick Step+", ps: [], plus: ["Quick Step"], exp: false, "expires": "2027-03-07" },  // AUTO-ADDED
@@ -167,10 +167,10 @@
         { name: "Slide Tackle+", ps: [], plus: ["Slide Tackle"], exp: false, "expires": "2027-03-07" },  // AUTO-ADDED
         { name: "Bruiser+", ps: [], plus: ["Bruiser"], exp: false, "expires": "2027-03-07" },  // AUTO-ADDED
         { name: "Anticipate+", ps: [], plus: ["Anticipate"], exp: false, "expires": "2027-03-07" },  // AUTO-ADDED
-        { name: "The Party is Inside", ps: ["Finesse Shot", "Tiki Taka", "Trickster"], plus: ["Technical", "Incisive Pass"], exp: false, "expires": "2026-03-18", pos: "RM or RW", maxRating: 88 },  // AUTO-ADDED
-        { name: "4 Star Weak Foot", ps: [], plus: [], exp: false, "expires": "2026-03-17", maxRating: 88 },  // AUTO-ADDED
+        { name: "The Party is Inside", ps: ["Finesse Shot", "Tiki Taka", "Trickster"], plus: ["Technical", "Incisive Pass"], exp: false, "expires": "2026-03-17", pos: "RM or RW", maxRating: 88 },  // AUTO-ADDED
+        { name: "4 Star Weak Foot", ps: [], plus: [], exp: false, "expires": "2026-03-16", maxRating: 88 },  // AUTO-ADDED
         { name: "Finesse Shot+", ps: [], plus: ["Finesse Shot"], exp: false, "expires": "2026-09-08", maxRating: 90 },  // AUTO-ADDED
-        { name: "Birthday Fullback", ps: ["Quick Step", "Bruiser", "Jockey"], plus: ["Intercept", "Pinged Pass"], exp: false, "expires": "2026-03-17", pos: "LB or RB", maxRating: 88 },  // AUTO-ADDED
+        { name: "Birthday Fullback", ps: ["Quick Step", "Bruiser", "Jockey"], plus: ["Intercept", "Pinged Pass"], exp: false, "expires": "2026-03-16", pos: "LB or RB", maxRating: 88 },  // AUTO-ADDED
         { name: "Relentless", ps: ["Relentless"], plus: [], exp: false, "expires": "2027-02-05" },  // AUTO-ADDED
         { name: "Slide Tackle", ps: ["Slide Tackle"], plus: [], exp: false, "expires": "2027-02-05" },  // AUTO-ADDED
         { name: "Bruiser", ps: ["Bruiser"], plus: [], exp: false, "expires": "2027-02-05" },  // AUTO-ADDED
@@ -220,14 +220,13 @@
         { name: "Chip Shot+", ps: [], plus: ["Chip Shot"], exp: false, "expires": "2027-02-05" },  // AUTO-ADDED
         { name: "Dead Ball+", ps: [], plus: ["Dead Ball"], exp: false, "expires": "2027-02-05" },  // AUTO-ADDED
         { name: "Gamechanger+", ps: [], plus: ["Gamechanger"], exp: false, "expires": "2027-02-05" },  // AUTO-ADDED
-        { name: "CB Level up", ps: ["Anticipate", "Jockey", "Intercept", "Bruiser", "Aerial Fortress"], plus: [], exp: false, "expires": "2026-03-16", pos: "CB", maxRating: 87 },  // AUTO-ADDED
-        { name: "Cake & Rash", ps: ["Technical", "Tiki Taka", "Trickster"], plus: ["Quick Step", "Finesse Shot"], exp: false, "expires": "2026-03-16", pos: "ST", maxRating: 89 },  // AUTO-ADDED
+        { name: "CB Level up", ps: ["Anticipate", "Jockey", "Intercept", "Bruiser", "Aerial Fortress"], plus: [], exp: false, "expires": "2026-03-15", pos: "CB", maxRating: 87 },  // AUTO-ADDED
+        { name: "Cake & Rash", ps: ["Technical", "Tiki Taka", "Trickster"], plus: ["Quick Step", "Finesse Shot"], exp: false, "expires": "2026-03-15", pos: "ST", maxRating: 89 },  // AUTO-ADDED
         { name: "Trickster Boost", ps: ["Trickster"], plus: [], exp: false, "expires": "2026-03-19", maxRating: 88 },  // AUTO-ADDED
-        { name: "Thunder Strike", ps: ["Low Driven Shot", "Power Shot"], plus: [], exp: false, "expires": "2026-03-15", maxRating: 86 },  // AUTO-ADDED
+        { name: "Thunder Strike", ps: ["Low Driven Shot", "Power Shot"], plus: [], exp: false, "expires": "2026-03-14", maxRating: 86 },  // AUTO-ADDED
         { name: "Birthday Warmup", ps: [], plus: [], exp: false, "expires": "2026-03-13", maxRating: 87 },  // AUTO-ADDED
-        { name: "Re-Enforced", ps: ["Press Proven", "Bruiser", "Technical"], plus: ["Enforcer"], exp: false, "expires": "2026-03-13", maxRating: 86 },  // AUTO-ADDED
-        { name: "Fantasy Captain ICON", ps: [], plus: [], exp: false, "expires": "2026-03-14" },  // AUTO-ADDED
-        { name: "Set Menu", ps: ["Tiki Taka", "Technical", "Press Proven", "Quick Step"], plus: [], exp: false, "expires": "2026-03-16", maxRating: 87 },  // AUTO-ADDED
+        { name: "Fantasy Captain ICON", ps: [], plus: [], exp: false, "expires": "2026-03-13" },  // AUTO-ADDED
+        { name: "Set Menu", ps: ["Tiki Taka", "Technical", "Press Proven", "Quick Step"], plus: [], exp: false, "expires": "2026-03-15", maxRating: 87 },  // AUTO-ADDED
         { name: "Inside Edge", ps: ["Low Driven Shot", "Gamechanger", "Technical", "Tiki Taka", "Incisive Pass"], plus: ["Finesse Shot"], exp: false, "expires": "2026-09-08", pos: "RW", maxRating: 87 },  // AUTO-ADDED
         { name: "Agile Maestro", ps: [], plus: [], exp: false, "expires": "2026-03-19", maxRating: 87 },  // AUTO-ADDED
         { name: "Iconic Attacker Glow Up", ps: ["Finesse Shot", "Rapid", "Incisive Pass", "Power Shot"], plus: ["Low Driven Shot", "Gamechanger"], exp: false, "expires": "2026-03-19", pos: "ST or LW or RW", maxRating: 87 },  // AUTO-ADDED
@@ -254,6 +253,8 @@
         { name: "Intro to Training Camp EVOs II", ps: ["Gamechanger"], plus: [], exp: false, "expires": "2026-09-08", maxRating: 82 },  // AUTO-ADDED
         { name: "Intro to Training Camp EVOs I", ps: [], plus: [], exp: false, "expires": "2026-09-08", pos: "GK", maxRating: 82 },  // AUTO-ADDED
         { name: "Intro to Evolutions", ps: [], plus: [], exp: false, "expires": "2026-09-08", maxRating: 81 },  // AUTO-ADDED
+        { name: "First Touch+", ps: [], plus: ["First Touch"], exp: true, maxRating: 87 },  // AUTO-ADDED (expired)
+        { name: "Re-Enforced", ps: ["Press Proven", "Bruiser", "Technical"], plus: ["Enforcer"], exp: true, maxRating: 86 },  // AUTO-ADDED (expired)
         { name: "Go Long", ps: ["Footwork", "Far Reach", "Cross Claimer"], plus: ["Far Throw"], exp: true, pos: "GK", maxRating: 86 },  // AUTO-ADDED (expired)
         { name: "Clinical Creator", ps: ["Low Driven Shot", "First Touch", "Precision Header"], plus: ["Finesse Shot", "Incisive Pass"], exp: true, pos: "ST", maxRating: 87 },  // AUTO-ADDED (expired)
         { name: "Bench Boost", ps: ["Tiki Taka", "Enforcer", "Acrobatic", "Aerial Fortress"], plus: ["Precision Header"], exp: true, maxRating: 74 },  // AUTO-ADDED (expired)
@@ -472,7 +473,6 @@
         { name: "Keep Composed", ps: [], plus: ["Press Proven"], exp: true, maxRating: 85 },  // AUTO-ADDED (expired)
         { name: "The Controller", ps: ["Intercept"], plus: ["Tiki Taka"], exp: true, maxRating: 85 },  // AUTO-ADDED (expired)
         { name: "Shadow Striker++", ps: [], plus: [], exp: true, pos: "CAM", maxRating: 86 },  // AUTO-ADDED (expired)
-        { name: "First Touch+", ps: [], plus: ["First Touch"], exp: true, maxRating: 84 },  // AUTO-ADDED (expired)
         { name: "Brazil Silver Skiller", ps: ["Tiki Taka", "Inventive", "Press Proven"], plus: ["Trickster"], exp: true, maxRating: 74 },  // AUTO-ADDED (expired)
         { name: "Silver Skiller", ps: ["Tiki Taka", "Inventive", "Press Proven"], plus: ["Trickster"], exp: true, maxRating: 74 },  // AUTO-ADDED (expired)
         { name: "Skill Moves Master", ps: [], plus: [], exp: true, maxRating: 85 },  // AUTO-ADDED (expired)
@@ -612,9 +612,7 @@
         { name: "The Debut", ps: [], plus: [], exp: true, pos: "GK", maxRating: 82 },  // AUTO-ADDED (expired)
         { name: "Cover Athlete", ps: ["Relentless"], plus: [], exp: true, pos: "CAM", maxRating: 83 },  // AUTO-ADDED (expired)
         { name: "Rising Guard", ps: [], plus: [], exp: true, maxRating: 82 },  // AUTO-ADDED (expired)
-        // ── AUTO-ADDED by sync_evos.py ──
-               // ── AUTO-ADDED by sync_evos.py ──
-        
+               
     ];
 
     function init() {
@@ -758,7 +756,7 @@
         const ratingHTML = evo.maxRating ? `<span class="rating-tag">≤ ${evo.maxRating}</span>` : '<span class="no-data">—</span>';
 
         row.innerHTML = `
-            <td><strong>${evo.name}</strong>${tag}</td>
+            <td><div class="name-cell"><strong>${evo.name}</strong>${tag ? tag : ''}</div></td>
             <td>${posHTML}</td>
             <td>${ratingHTML}</td>
             <td><div class="icon-row">${psHTML}</div></td>
