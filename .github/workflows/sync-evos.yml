@@ -1,0 +1,36 @@
+name: Daily Evo Sync
+
+on:
+  schedule:
+    # Runs at 6:15pm UTC every day — just after evos expire at 6pm UK time
+    - cron: '01 18 * * *'
+  workflow_dispatch:  # also lets you trigger it manually from GitHub
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright --break-system-packages
+          playwright install chromium --with-deps
+
+      - name: Run sync
+        run: python sync_evos.py --apply
+
+      - name: Commit & push if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "chore: daily evo sync $(date -u '+%Y-%m-%d')"
+          git push
