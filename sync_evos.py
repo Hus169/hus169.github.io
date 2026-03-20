@@ -62,7 +62,7 @@ SCRAPER_JS = """
                 const c = getClass(el).toLowerCase();
                 if (c.includes('badge') || c.includes('og-pill') || c.includes('pill')) continue;
                 const txt = (el.childNodes[0]?.textContent || el.textContent || '').trim();
-                if (txt.length > 3 && txt.length < 80 && !/^[A-Z0-9\s+]+$/.test(txt)) {
+                if (txt.length > 3 && txt.length < 80 && !/^[A-Z0-9\\s+]+$/.test(txt)) {
                     if (!badgeWords.some(bw => txt.toUpperCase() === bw)) {
                         name = txt; break;
                     }
@@ -141,7 +141,7 @@ SCRAPER_JS = """
                 const value = (valueEl.textContent || '').trim();
                 if (label === 'POSITION') position = value;
                 if (label === 'OVERALL') {
-                    const m = value.match(/\d+/);
+                    const m = value.match(/\\d+/);
                     if (m) maxRating = parseInt(m[0]);
                 }
             });
@@ -469,7 +469,20 @@ def patch_html(html, diff):
     if not m: raise ValueError("rawData block not found")
     block = m.group(2)
 
-    # 1. Mark expired
+    # 0. Auto-expire any entry whose expires date is now in the past
+    today = datetime.now(timezone.utc).date().isoformat()
+    def flip_if_past(mo):
+        obj = mo.group(0)
+        # Only touch entries that are still exp: false
+        if 'exp: true' in obj or 'exp:true' in obj:
+            return obj
+        expires_m = re.search(r'"expires"\s*:\s*"([^"]+)"', obj)
+        if expires_m and expires_m.group(1) < today:
+            obj = re.sub(r'\bexp\s*:\s*false', 'exp: true', obj)
+        return obj
+    block = re.sub(r'\{[^{}]+\}', flip_if_past, block)
+
+    # 1. Mark expired (disappeared from futbin)
     for evo in diff['expired_now']:
         name = re.escape(evo['name'].replace('"', '\\"'))
         block = re.sub(
