@@ -123,7 +123,16 @@
     // Full unique dataset (Active + your complete Expired list)
     const rawData = [
         // ── AUTO-ADDED by sync_evos.py ──
-        { name: "Party in the Middle", ps: ["Incisive Pass", "Long Ball Pass", "Bruiser"], plus: ["Pinged Pass", "Intercept"], exp: false, "expires": "2026-03-23", pos: "CM", maxRating: 88, ovrBoost: "+20", ovrCap: 89 },  // AUTO-ADDED
+        { name: "Party Exit", ps: ["Technical", "Quick Step", "Trickster"], plus: [], exp: false, "expires": "2026-03-27", maxRating: 87 },  // AUTO-ADDED
+        { name: "Party at the Back", ps: ["Bruiser", "Anticipate"], plus: ["Jockey", "Intercept"], exp: false, "expires": "2026-03-27", pos: "CB", maxRating: 88, ovrBoost: "+20", ovrCap: 89 },  // AUTO-ADDED
+        { name: "UCL Specialist", ps: ["Trickster", "Technical"], plus: ["Finesse Shot"], exp: false, "expires": "2026-03-27", pos: "RW", maxRating: 87, ovrBoost: "+2", ovrCap: 88 },  // AUTO-ADDED
+        { name: "Low Driven+", ps: [], plus: ["Low Driven Shot"], exp: false, "expires": "2026-09-16", maxRating: 90 },  // AUTO-ADDED
+        { name: "Quick Step +", ps: [], plus: ["Quick Step"], exp: false, "expires": "2026-09-16", maxRating: 90 },  // AUTO-ADDED
+        { name: "Turbocharged", ps: ["Rapid", "Quick Step", "Relentless"], plus: [], exp: false, "expires": "2026-03-24", maxRating: 88 },  // AUTO-ADDED
+        { name: "5 Star Weak Foot Upgrades", ps: [], plus: [], exp: false, "expires": "2026-03-27", maxRating: 88 },  // AUTO-ADDED
+        { name: "Fly Fishing", ps: ["Anticipate"], plus: ["Intercept"], exp: false, "expires": "2026-03-27", maxRating: 88, ovrBoost: "+1" },  // AUTO-ADDED
+        { name: "5 Star Skill Moves and Weak Foot Upgrade", ps: [], plus: [], exp: false, "expires": "2026-04-19", maxRating: 89 },  // AUTO-ADDED
+        { name: "Tiki Taka+ and Low Driven+", ps: [], plus: ["Low Driven Shot", "Tiki Taka"], exp: false, "expires": "2026-04-19", maxRating: 89 },  // AUTO-ADDED{ name: "Party in the Middle", ps: ["Incisive Pass", "Long Ball Pass", "Bruiser"], plus: ["Pinged Pass", "Intercept"], exp: false, "expires": "2026-03-23", pos: "CM", maxRating: 88, ovrBoost: "+20", ovrCap: 89 },  // AUTO-ADDED
         { name: "Birthday Brunch", ps: ["Tiki Taka", "Technical", "Finesse Shot"], plus: ["Rapid"], exp: false, "expires": "2026-03-23", pos: "ST", maxRating: 87, ovrBoost: "+5", ovrCap: 88 },  // AUTO-ADDED
         { name: "FUT Birthday Retro 18", ps: [], plus: [], exp: false, "expires": "2026-03-23" },  // AUTO-ADDED
         { name: "FUT Birthday Retro 19", ps: [], plus: [], exp: false, "expires": "2026-03-23" },  // AUTO-ADDED
@@ -164,10 +173,10 @@
         { name: "Make Your Idol - Attacker 1", ps: ["Finesse Shot", "Quick Step"], plus: [], exp: false, "expires": "2026-04-15", maxRating: 85, ovrBoost: "+2", ovrCap: 87 },  // AUTO-ADDED
         { name: "Make Your Idol - Starter", ps: [], plus: [], exp: false, "expires": "2026-04-15", maxRating: 85, ovrBoost: "+50", ovrCap: 85 },  // AUTO-ADDED
         { name: "Winger Transformation", ps: [], plus: [], exp: false, "expires": "2026-03-20", maxRating: 89 },  // AUTO-ADDED
-        { name: "Pressure? What Pressure", ps: [], plus: [], exp: false, "expires": "2026-03-17T17:44:24Z", maxRating: 88 },  // AUTO-ADDED
-        { name: "Candles & Cramps", ps: ["Block", "Jockey", "Intercept"], plus: ["Quick Step", "Anticipate"], exp: false, "expires": "2026-03-19", pos: "CB", maxRating: 88, ovrBoost: "+30", ovrCap: 89 },  // AUTO-ADDED
+        { name: "Pressure? What Pressure", ps: [], plus: [], exp: true, "expires": "2026-03-17T17:44:24Z", maxRating: 88 },  // AUTO-ADDED
+        { name: "Candles & Cramps", ps: ["Block", "Jockey", "Intercept"], plus: ["Quick Step", "Anticipate"], exp: true, "expires": "2026-03-19", pos: "CB", maxRating: 88, ovrBoost: "+30", ovrCap: 89 },  // AUTO-ADDED
         { name: "5 Star Factory", ps: [], plus: [], exp: false, "expires": "2026-03-23", maxRating: 88 },  // AUTO-ADDED
-        { name: "Prepare for the party", ps: ["Incisive Pass", "Press Proven", "First Touch"], plus: [], exp: false, "expires": "2026-03-18", maxRating: 87 },  // AUTO-ADDED
+        { name: "Prepare for the party", ps: ["Incisive Pass", "Press Proven", "First Touch"], plus: [], exp: true, "expires": "2026-03-18", maxRating: 87 },  // AUTO-ADDED
         { name: "Enforcer+", ps: [], plus: ["Enforcer"], exp: false, "expires": "2027-02-09" },  // AUTO-ADDED
         { name: "Long Throw+", ps: [], plus: ["Long Throw"], exp: false, "expires": "2027-02-09" },  // AUTO-ADDED
         { name: "Quick Step+", ps: [], plus: ["Quick Step"], exp: false, "expires": "2027-02-09" },  // AUTO-ADDED
@@ -178,10 +187,10 @@
         { name: "Slide Tackle+", ps: [], plus: ["Slide Tackle"], exp: false, "expires": "2027-02-09" },  // AUTO-ADDED
         { name: "Bruiser+", ps: [], plus: ["Bruiser"], exp: false, "expires": "2027-02-09" },  // AUTO-ADDED
         { name: "Anticipate+", ps: [], plus: ["Anticipate"], exp: false, "expires": "2027-02-09" },  // AUTO-ADDED
-        { name: "The Party is Inside", ps: ["Finesse Shot", "Tiki Taka", "Trickster"], plus: ["Technical", "Incisive Pass"], exp: false, "expires": "2026-03-17", pos: "RM or RW", maxRating: 88, ovrBoost: "+30", ovrCap: 90 },  // AUTO-ADDED
-        { name: "4 Star Weak Foot", ps: [], plus: [], exp: false, "expires": "2026-03-17T17:44:24Z", maxRating: 88 },  // AUTO-ADDED
+        { name: "The Party is Inside", ps: ["Finesse Shot", "Tiki Taka", "Trickster"], plus: ["Technical", "Incisive Pass"], exp: true, "expires": "2026-03-17", pos: "RM or RW", maxRating: 88, ovrBoost: "+30", ovrCap: 90 },  // AUTO-ADDED
+        { name: "4 Star Weak Foot", ps: [], plus: [], exp: true, "expires": "2026-03-17T17:44:24Z", maxRating: 88 },  // AUTO-ADDED
         { name: "Finesse Shot+", ps: [], plus: ["Finesse Shot"], exp: false, "expires": "2026-09-12", maxRating: 90 },  // AUTO-ADDED
-        { name: "Birthday Fullback", ps: ["Quick Step", "Bruiser", "Jockey"], plus: ["Intercept", "Pinged Pass"], exp: false, "expires": "2026-03-17T17:44:24Z", pos: "LB or RB", maxRating: 88, ovrBoost: "+15", ovrCap: 90 },  // AUTO-ADDED
+        { name: "Birthday Fullback", ps: ["Quick Step", "Bruiser", "Jockey"], plus: ["Intercept", "Pinged Pass"], exp: true, "expires": "2026-03-17T17:44:24Z", pos: "LB or RB", maxRating: 88, ovrBoost: "+15", ovrCap: 90 },  // AUTO-ADDED
         { name: "Relentless", ps: ["Relentless"], plus: [], exp: false, "expires": "2027-02-09" },  // AUTO-ADDED
         { name: "Slide Tackle", ps: ["Slide Tackle"], plus: [], exp: false, "expires": "2027-02-09" },  // AUTO-ADDED
         { name: "Bruiser", ps: ["Bruiser"], plus: [], exp: false, "expires": "2027-02-09" },  // AUTO-ADDED
@@ -624,6 +633,8 @@
         { name: "Rising Guard", ps: [], plus: [], exp: true, maxRating: 82 },  // AUTO-ADDED (expired)
  
     
+    
+    
     ];
 
     function init() {
@@ -652,6 +663,15 @@
             : new Date(isoDate + 'T23:59:59Z');
         const ms = target - Date.now();
         return isNaN(ms) ? NaN : ms;
+    }
+
+    // True if explicitly marked expired OR expiry date has passed
+    function isExpired(evo) {
+        if (evo.exp) return true;
+        if (evo.expires) {
+            return new Date(evo.expires + 'T23:59:59Z') < Date.now();
+        }
+        return false;
     }
 
     function daysUntil(isoDate) {
@@ -717,7 +737,7 @@
         const expired = [];
 
         rawData.forEach(evo => {
-            if (evo.exp)                  { expired.push(evo);  return; }
+            if (isExpired(evo))           { expired.push(evo);  return; }
             if (isPlaystyleNamedEvo(evo)) { psGroup.push(evo);  return; }
             normal.push(evo);
         });
@@ -775,7 +795,7 @@
 
     function buildRow(evo) {
         const row = document.createElement('tr');
-        row.className = evo.exp ? 'expired-row' : 'active-row';
+        row.className = isExpired(evo) ? 'expired-row' : 'active-row';
 
         const psHTML = evo.ps.length > 0 ? evo.ps.map(p => {
             const d = playstyleMap[p];
@@ -787,7 +807,7 @@
             return d ? `<img src="${d.folder}/${d.file}_plus.png" class="ps-icon plus-icon" title="${p}+">` : `<span>${p}+</span>`;
         }).join('') : '<span class="no-data">N/A</span>';
 
-        const tag = evo.exp
+        const tag = isExpired(evo)
             ? '<span class="status-tag">Expired</span>'
             : evo.expires
                 ? buildExpiryTag(evo.expires)
@@ -855,7 +875,7 @@
                                 evo.plus.some(p => p.toLowerCase().includes(query));
             }
 
-            const matchesExpiry = hideExpiredState ? !evo.exp : true;
+            const matchesExpiry = hideExpiredState ? !isExpired(evo) : true;
             row.style.display = (matchesSearch && matchesExpiry) ? "" : "none";
         });
     }
