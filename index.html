@@ -123,7 +123,21 @@
     // Full unique dataset (Active + your complete Expired list)
     const rawData = [
         // ── AUTO-ADDED by sync_evos.py ──
-        { name: "Party Exit", ps: ["Technical", "Quick Step", "Trickster"], plus: [], exp: false, "expires": "2026-03-27", maxRating: 87 },  // AUTO-ADDED
+        { name: "Build your own FUT Birthday", ps: [], plus: [], exp: false, "expires": "2026-03-28", maxRating: 89 },  // AUTO-ADDED
+        { name: "FOF: Answer the Call", ps: [], plus: [], exp: false, "expires": "2026-03-28" },  // AUTO-ADDED
+        { name: "High-Speed Action", ps: ["Rapid", "First Touch"], plus: ["Quick Step"], exp: false, "expires": "2026-03-28", maxRating: 87, ovrBoost: "+1", ovrCap: 88 },  // AUTO-ADDED
+        { name: "Blonde Angel", ps: ["Technical", "Low Driven Shot", "Incisive Pass", "First Touch"], plus: ["Quick Step", "Finesse Shot"], exp: false, "expires": "2026-03-28", pos: "RM or RW", maxRating: 88, ovrBoost: "+50", ovrCap: 90 },  // AUTO-ADDED
+        { name: "CDM Provisions", ps: ["Intercept", "Quick Step"], plus: [], exp: false, "expires": "2026-03-28", pos: "CDM", maxRating: 88 },  // AUTO-ADDED
+        { name: "CAM Provisions", ps: ["Technical", "Power Shot"], plus: [], exp: false, "expires": "2026-03-28", pos: "CAM", maxRating: 88 },  // AUTO-ADDED
+        { name: "FOF Answer The Call", ps: [], plus: [], exp: false, "expires": "2026-04-04" },  // AUTO-ADDED
+        { name: "Batigol", ps: ["Quick Step", "Incisive Pass", "Enforcer"], plus: ["Power Shot", "Finesse Shot"], exp: false, "expires": "2026-04-04", pos: "ST", maxRating: 88, ovrBoost: "+15", ovrCap: 90 },  // AUTO-ADDED
+        { name: "Euro Trio", ps: ["Anticipate", "Intercept", "Jockey", "Block", "Aerial Fortress", "Slide Tackle"], plus: ["Bruiser"], exp: false, "expires": "2026-03-28", maxRating: 87, ovrBoost: "+2" },  // AUTO-ADDED
+        { name: "South American Stars", ps: ["Rapid", "Press Proven", "First Touch", "Trickster"], plus: ["Technical"], exp: false, "expires": "2026-03-28", maxRating: 87, ovrBoost: "+2" },  // AUTO-ADDED
+        { name: "Euro Minitrip", ps: ["Inventive", "Incisive Pass", "Long Ball Pass", "Tiki Taka", "Whipped Pass"], plus: ["Pinged Pass"], exp: false, "expires": "2026-03-28", maxRating: 87, ovrBoost: "+2", ovrCap: 89 },  // AUTO-ADDED
+        { name: "National Captain: Final Touch", ps: ["Pinged Pass", "Tiki Taka", "Bruiser", "Technical", "First Touch", "Quick Step"], plus: [], exp: false, "expires": "2026-03-24", pos: "CM", maxRating: 93 },  // AUTO-ADDED
+        { name: "National Captain", ps: ["Anticipate", "Finesse Shot"], plus: ["Intercept", "Incisive Pass", "Power Shot"], exp: false, "expires": "2026-03-24", pos: "CM", maxRating: 89, ovrBoost: "+46", ovrCap: 93 },  // AUTO-ADDED
+        { name: "5 Star Factory 2", ps: [], plus: [], exp: false, "expires": "2026-04-04", maxRating: 88 },  // AUTO-ADDED
+        { name: "Guardian of the Line", ps: ["Anticipate", "Aerial Fortress", "Block", "Intercept", "Jockey", "Slide Tackle"], plus: [], exp: false, "expires": "2026-04-20", maxRating: 89 },  // AUTO-ADDED{ name: "Party Exit", ps: ["Technical", "Quick Step", "Trickster"], plus: [], exp: false, "expires": "2026-03-27", maxRating: 87 },  // AUTO-ADDED
         { name: "Party at the Back", ps: ["Bruiser", "Anticipate"], plus: ["Jockey", "Intercept"], exp: false, "expires": "2026-03-27", pos: "CB", maxRating: 88, ovrBoost: "+20", ovrCap: 89 },  // AUTO-ADDED
         { name: "UCL Specialist", ps: ["Trickster", "Technical"], plus: ["Finesse Shot"], exp: false, "expires": "2026-03-27", pos: "RW", maxRating: 87, ovrBoost: "+2", ovrCap: 88 },  // AUTO-ADDED
         { name: "Low Driven+", ps: [], plus: ["Low Driven Shot"], exp: false, "expires": "2026-09-16", maxRating: 90 },  // AUTO-ADDED
@@ -172,7 +186,7 @@
         { name: "Make Your Idol - Tiki Taka+", ps: [], plus: ["Tiki Taka"], exp: false, "expires": "2026-04-15" },  // AUTO-ADDED
         { name: "Make Your Idol - Attacker 1", ps: ["Finesse Shot", "Quick Step"], plus: [], exp: false, "expires": "2026-04-15", maxRating: 85, ovrBoost: "+2", ovrCap: 87 },  // AUTO-ADDED
         { name: "Make Your Idol - Starter", ps: [], plus: [], exp: false, "expires": "2026-04-15", maxRating: 85, ovrBoost: "+50", ovrCap: 85 },  // AUTO-ADDED
-        { name: "Winger Transformation", ps: [], plus: [], exp: false, "expires": "2026-03-20", maxRating: 89 },  // AUTO-ADDED
+        { name: "Winger Transformation", ps: [], plus: [], exp: true, "expires": "2026-03-20", maxRating: 89 },  // AUTO-ADDED
         { name: "Pressure? What Pressure", ps: [], plus: [], exp: true, "expires": "2026-03-17T17:44:24Z", maxRating: 88 },  // AUTO-ADDED
         { name: "Candles & Cramps", ps: ["Block", "Jockey", "Intercept"], plus: ["Quick Step", "Anticipate"], exp: true, "expires": "2026-03-19", pos: "CB", maxRating: 88, ovrBoost: "+30", ovrCap: 89 },  // AUTO-ADDED
         { name: "5 Star Factory", ps: [], plus: [], exp: false, "expires": "2026-03-23", maxRating: 88 },  // AUTO-ADDED
@@ -632,6 +646,7 @@
         { name: "Cover Athlete", ps: ["Relentless"], plus: [], exp: true, pos: "CAM", maxRating: 83, ovrBoost: "+2", ovrCap: 85 },  // AUTO-ADDED (expired)
         { name: "Rising Guard", ps: [], plus: [], exp: true, maxRating: 82 },  // AUTO-ADDED (expired)
  
+    
     
     
     
