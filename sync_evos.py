@@ -38,176 +38,243 @@ KNOWN_PLAYSTYLES = [
 ]
 
 # ── Scraper ───────────────────────────────────────────────────────────────────
+# Termux/ARM-compatible scraper using cloudscraper + BeautifulSoup.
+# Install deps: pip install cloudscraper beautifulsoup4
 
-# ── JS scraper (runs inside the browser on the current page) ─────────────────
+BADGE_WORDS = {'EVOLUTIONS','NEW','EXPIRED','REWARDS','TRAINING',
+               'BAKERY','PREMIUM','COSMETICS','FS ACADEMY'}
 
-SCRAPER_JS = """
-(knownPlaystyles) => {
-    const results = [];
+def _parse_card_bs4(card, known_ps):
+    """Parse one BeautifulSoup .evolutions-overview-wrapper tag → raw dict."""
+    # ── Name ──────────────────────────────────────────────────────
+    name = None
+    card_top = card.select_one('.evolutions-card-top')
+    if card_top:
+        for el in card_top.find_all(True):
+            cls = ' '.join(el.get('class') or []).lower()
+            if any(x in cls for x in ('badge', 'og-pill', 'pill')):
+                continue
+            txt = (el.get_text(strip=True) or '')
+            if 3 < len(txt) < 80 and not re.match(r'^[A-Z0-9\s+]+$', txt):
+                if txt.upper() not in BADGE_WORDS:
+                    name = txt; break
+        if not name:
+            raw = card_top.get_text(' ', strip=True)
+            for bw in BADGE_WORDS:
+                raw = re.sub(rf'\b{bw}\b', '', raw, flags=re.I)
+            raw = raw.strip()
+            if len(raw) > 3:
+                name = raw
+    if not name:
+        return None
 
-    function getClass(el) {
-        return (el && el.getAttribute && el.getAttribute('class')) || '';
+    # ── Expiry ────────────────────────────────────────────────────
+    expires_text = None
+    expires_fallback = None
+    for block in card.select('.evolution-upgrade'):
+        label_el = block.select_one('.xxs-font, .unlock-within') or \
+                   next((e for e in block.find_all(True)
+                         if 'text-faded' in (e.get('class') or [])), None)
+        value_el = block.select_one('.xs-font') or \
+                   next((e for e in block.find_all(True)
+                         if 'semi-bold' in ' '.join(e.get('class') or [])), None)
+        if not label_el or not value_el:
+            continue
+        lbl = label_el.get_text(strip=True).upper()
+        val = value_el.get_text(strip=True)
+        if 'UNLOCK' in lbl:
+            expires_text = val
+        elif 'EXPIR' in lbl:
+            expires_fallback = val
+    expires_text = expires_text or expires_fallback
+    if not expires_text:
+        m = re.search(
+            r'UNLOCK(?:\s+WITHIN)?\s*(\d+)\s*(day|days|week|weeks|hour|hours)',
+            card.get_text(), re.I)
+        if m:
+            expires_text = m.group(1) + ' ' + m.group(2)
+
+    # ── Playstyles ────────────────────────────────────────────────
+    from bs4 import NavigableString as _NS
+    ps_base, ps_plus = [], []
+    ps_base_caps, ps_plus_caps = [], []   # slot-limit per playstyle (the "|7" number)
+    for row in card.select('.xs-row, .border-bottom'):
+        label_el = next((e for e in row.find_all(True)
+                         if 'text-faded' in (e.get('class') or [])), None)
+        value_el = next((e for e in row.find_all(True)
+                         if 'positive-color' in (e.get('class') or [])), None)
+        if not label_el or not value_el:
+            continue
+        lbl = label_el.get_text(strip=True)
+        if lbl not in ('PS', 'PS+'):
+            continue
+        # Direct text children only — skip the evo-cap-line span
+        ps_name = ''.join(
+            str(n) for n in value_el.children if isinstance(n, _NS)
+        ).strip()
+        matched = next((p for p in known_ps
+                        if p.lower() == ps_name.lower()), None)
+        if not matched:
+            continue
+        # Cap number lives in the last <span> inside .evo-cap-line
+        cap = None
+        cap_line = value_el.select_one('.evo-cap-line')
+        if cap_line:
+            spans = cap_line.find_all('span')
+            if spans:
+                try: cap = int(spans[-1].get_text(strip=True))
+                except ValueError: pass
+        if lbl == 'PS+':
+            if matched not in ps_plus:
+                ps_plus.append(matched)
+                ps_plus_caps.append(cap)
+        else:
+            if matched not in ps_base:
+                ps_base.append(matched)
+                ps_base_caps.append(cap)
+    plus_set = set(ps_plus)
+    # Filter base list, keeping caps in sync
+    filtered = [(p, c) for p, c in zip(ps_base, ps_base_caps) if p not in plus_set]
+    ps_base      = [p for p, _ in filtered]
+    ps_base_caps = [c for _, c in filtered]
+
+    # ── Position & Max Rating (from .evo-box-req) ─────────────────
+    position = max_rating = None
+    req_box = card.select_one('.evo-box-req')
+    if req_box:
+        for row in req_box.select('.xxs-row'):
+            label_el = next((e for e in row.find_all(True)
+                             if 'text-faded' in (e.get('class') or [])), None)
+            value_el = next((e for e in row.find_all(True)
+                             if 'positive-color' in (e.get('class') or [])), None)
+            if not label_el or not value_el:
+                continue
+            lbl = label_el.get_text(strip=True).upper()
+            val = value_el.get_text(strip=True)
+            if lbl == 'POSITION':
+                position = val
+            elif lbl == 'OVERALL':
+                m = re.search(r'\d+', val)
+                if m: max_rating = int(m.group())
+
+    # ── OVR Boost & Cap ───────────────────────────────────────────
+    ovr_boost = ovr_cap = None
+    for row in card.select('.border-bottom.xs-row'):
+        label_el = next((e for e in row.find_all(True)
+                         if 'text-faded' in (e.get('class') or [])), None)
+        value_el = next((e for e in row.find_all(True)
+                         if 'positive-color' in (e.get('class') or [])), None)
+        if not label_el or not value_el:
+            continue
+        if label_el.get_text(strip=True).lower() != 'overall':
+            continue
+        from bs4 import NavigableString as _NS
+        boost = ''.join(
+            str(n) for n in value_el.children
+            if isinstance(n, _NS)
+        ).strip()
+        if boost:
+            ovr_boost = boost
+        cap_line = value_el.select_one('.evo-cap-line')
+        if cap_line:
+            spans = cap_line.find_all('span')
+            if spans:
+                cap_num = spans[-1].get_text(strip=True)
+                try: ovr_cap = int(cap_num)
+                except ValueError: pass
+
+    return {
+        'name':        name.strip(),
+        'expiresText': expires_text,
+        'ps':          ps_base,
+        'psCaps':      ps_base_caps,
+        'plus':        ps_plus,
+        'plusCaps':    ps_plus_caps,
+        'position':    position,
+        'maxRating':   max_rating,
+        'ovrBoost':    ovr_boost,
+        'ovrCap':      ovr_cap,
     }
 
-    const cards = document.querySelectorAll('.evolutions-overview-wrapper');
 
-    cards.forEach(card => {
-        // ── Name ─────────────────────────────────────────────────
-        let name = null;
-        const cardTop = card.querySelector('.evolutions-card-top');
-        if (cardTop) {
-            const badgeWords = ['EVOLUTIONS','NEW','EXPIRED','REWARDS','TRAINING',
-                                'BAKERY','PREMIUM','COSMETICS','FS ACADEMY'];
-            for (const el of cardTop.querySelectorAll('*')) {
-                const c = getClass(el).toLowerCase();
-                if (c.includes('badge') || c.includes('og-pill') || c.includes('pill')) continue;
-                const txt = (el.childNodes[0]?.textContent || el.textContent || '').trim();
-                if (txt.length > 3 && txt.length < 80 && !/^[A-Z0-9\\s+]+$/.test(txt)) {
-                    if (!badgeWords.some(bw => txt.toUpperCase() === bw)) {
-                        name = txt; break;
-                    }
-                }
-            }
-            if (!name) {
-                let raw = (cardTop.textContent || '').trim();
-                badgeWords.forEach(bw => {
-                    raw = raw.replace(new RegExp('\\b' + bw + '\\b', 'gi'), '');
-                });
-                raw = raw.replace(/\\s+/g, ' ').trim();
-                if (raw.length > 3) name = raw;
-            }
-        }
-        if (!name) return;
-
-        // ── Expiry ────────────────────────────────────────────────
-        let expiresText = null;
-        let expiresTextFallback = null;
-        card.querySelectorAll('.evolution-upgrade').forEach(block => {
-            const labelEl = block.querySelector('.xxs-font, [class*="text-faded"], .unlock-within');
-            const valueEl = block.querySelector('.xs-font, [class*="semi-bold"]');
-            if (!labelEl || !valueEl) return;
-            const labelText = (labelEl.textContent || '').trim().toUpperCase();
-            if (labelText.includes('UNLOCK')) {
-                // UNLOCK = real player deadline (when you can no longer complete the evo)
-                expiresText = (valueEl.textContent || '').trim();
-            } else if (labelText.includes('EXPIRE')) {
-                // EXPIRES = when the card disappears — fallback only
-                expiresTextFallback = (valueEl.textContent || '').trim();
-            }
-        });
-        expiresText = expiresText || expiresTextFallback;
-        if (!expiresText) {
-            const m = (card.textContent || '').match(
-                /UNLOCK(?:\\s+WITHIN)?\\s*(\\d+)\\s*(day|days|week|weeks|hour|hours)/i
-            );
-            if (m) expiresText = m[1] + ' ' + m[2];
-        }
-
-        // ── Playstyles ────────────────────────────────────────────
-        const psBase = [], psPlus = [];
-        card.querySelectorAll('.xs-row, .border-bottom').forEach(row => {
-            const labelEl = row.querySelector('.text-faded');
-            const valueEl = row.querySelector('.positive-color');
-            if (!labelEl || !valueEl) return;
-            const label = (labelEl.textContent || '').trim();
-            if (label !== 'PS' && label !== 'PS+') return;
-            let psName = '';
-            for (const node of valueEl.childNodes) {
-                if (node.nodeType === Node.TEXT_NODE) psName += node.textContent;
-            }
-            psName = psName.trim();
-            const matched = knownPlaystyles.find(ps => ps.toLowerCase() === psName.toLowerCase());
-            if (!matched) return;
-            if (label === 'PS+') {
-                if (!psPlus.includes(matched)) psPlus.push(matched);
-            } else {
-                if (!psBase.includes(matched)) psBase.push(matched);
-            }
-        });
-        const plusSet = new Set(psPlus);
-        const psBaseFiltered = psBase.filter(ps => !plusSet.has(ps));
-
-        // ── Position, Max Rating & OVR Boost ──────────────────────
-        // Scoped strictly to .evo-box-req (Player Requirements section)
-        let position = null;
-        let maxRating = null;
-        const reqBox = card.querySelector('.evo-box-req');
-        if (reqBox) {
-            reqBox.querySelectorAll('.xxs-row').forEach(row => {
-                const labelEl = row.querySelector('.text-faded');
-                const valueEl = row.querySelector('.positive-color');
-                if (!labelEl || !valueEl) return;
-                const label = (labelEl.textContent || '').trim().toUpperCase();
-                const value = (valueEl.textContent || '').trim();
-                if (label === 'POSITION') position = value;
-                if (label === 'OVERALL') {
-                    const m = value.match(/\\d+/);
-                    if (m) maxRating = parseInt(m[0]);
-                }
-            });
-        }
-
-        // ── OVR Boost (+40) and OVR Cap (91) ─────────────────────
-        // From: <div class="positive-color">+40<span class="evo-cap-line"><span class="evo-cap-arrow"> | </span><span>91</span></span></div>
-        let ovrBoost = null;
-        let ovrCap   = null;
-        card.querySelectorAll('.border-bottom.xs-row').forEach(row => {
-            const labelEl = row.querySelector('.text-faded');
-            const valueEl = row.querySelector('.positive-color');
-            if (!labelEl || !valueEl) return;
-            if ((labelEl.textContent || '').trim().toLowerCase() !== 'overall') return;
-            // Boost = leading text node before the cap span
-            let boost = '';
-            for (const node of valueEl.childNodes) {
-                if (node.nodeType === Node.TEXT_NODE) boost += node.textContent;
-            }
-            boost = boost.trim();
-            if (boost) ovrBoost = boost;
-            // Cap = last <span> inside .evo-cap-line
-            const capLine = valueEl.querySelector('.evo-cap-line');
-            if (capLine) {
-                const spans = capLine.querySelectorAll('span');
-                const last = spans[spans.length - 1];
-                if (last) {
-                    const capNum = parseInt((last.textContent || '').trim());
-                    if (!isNaN(capNum)) ovrCap = capNum;
-                }
-            }
-        });
-
-        results.push({
-            name: name.trim(),
-            expiresText: expiresText || null,
-            ps: psBaseFiltered,
-            plus: psPlus,
-            position: position,
-            maxRating: maxRating,
-            ovrBoost: ovrBoost,
-            ovrCap:   ovrCap,
-        });
-    });
-
-    return results;
-}
-"""
-
-
-def _load_page(page, url, label):
-    """Navigate to url, wait for evo cards, scroll to load lazy content."""
+def _fetch_evos_bs4(scraper, url, label):
+    """Fetch one futbin evolutions page, return list of raw dicts."""
+    from bs4 import BeautifulSoup
     print(f"  → {label}: {url}")
-    page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+    resp = scraper.get(url, timeout=40)
+    soup = BeautifulSoup(resp.text, 'html.parser')
+    cards = soup.select('.evolutions-overview-wrapper')
+    print(f"    Found {len(cards)} card(s)")
+    if not cards:
+        print(y("    No cards found in static HTML — futbin may be rendering via JS."))
+        print(y("    See 'Manual snapshot fallback' in the README or run with --no-scrape."))
+    results = []
+    for card in cards:
+        item = _parse_card_bs4(card, KNOWN_PLAYSTYLES)
+        if item:
+            results.append(item)
+    return results
+
+
+def scrape_futbin() -> tuple[list[dict], list[dict]]:
+    """Scrape active + expired evolutions. Returns (active, expired).
+    Uses cloudscraper + BeautifulSoup — no browser required (Termux-safe).
+    """
     try:
-        page.wait_for_selector(".evolutions-overview-wrapper", timeout=20_000)
-    except Exception:
-        print(y("    Selector timeout — trying extended wait..."))
-        page.wait_for_timeout(15_000)
-    for _ in range(8):
-        page.mouse.wheel(0, 800)
-        page.wait_for_timeout(400)
-    page.wait_for_timeout(2000)
-    count = page.locator(".evolutions-overview-wrapper").count()
-    print(f"    Found {count} card(s)")
-    return count
+        import cloudscraper
+    except ImportError:
+        print(r("cloudscraper not installed. Run:"))
+        print(r("  pip install cloudscraper beautifulsoup4"))
+        sys.exit(1)
+    try:
+        from bs4 import BeautifulSoup  # noqa: F401 — verify import
+    except ImportError:
+        print(r("beautifulsoup4 not installed. Run:"))
+        print(r("  pip install beautifulsoup4"))
+        sys.exit(1)
+
+    print(f"\n{b('Fetching pages (no browser needed)')}")
+    scraper = cloudscraper.create_scraper(
+        browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False}
+    )
+
+    print(f"\n{b('Active evolutions')}")
+    raw_active  = _fetch_evos_bs4(scraper, "https://www.futbin.com/evolutions",         "active")
+
+    print(f"\n{b('Expired evolutions')}")
+    raw_expired = _fetch_evos_bs4(scraper, "https://www.futbin.com/evolutions/expired",  "expired")
+
+    print(f"\n{b('Parsing active...')}")
+    active  = _parse_raw(raw_active,  expired_flag=False)
+    print(f"\n{b('Parsing expired...')}")
+    expired = _parse_raw(raw_expired, expired_flag=True)
+
+    def dedup(lst):
+        seen, out = set(), []
+        for e in lst:
+            k = e['name'].lower()
+            if k not in seen:
+                seen.add(k); out.append(e)
+        return out
+
+    active  = dedup(active)
+    expired = dedup(expired)
+
+    if not active and not expired:
+        print(y("\n  ⚠ Zero cards parsed from HTML."))
+        print(y("  Futbin likely renders cards client-side (React SPA)."))
+        print(y("  ─── Manual snapshot fallback ────────────────────────────────"))
+        print(y("  1. Open https://www.futbin.com/evolutions in a desktop browser"))
+        print(y("  2. Open DevTools → Console (F12)"))
+        print(y("  3. Paste the SCRAPER_JS from the original sync_evos.py"))
+        print(y("     and run: copy(JSON.stringify(results))"))
+        print(y("  4. Save as futbin_snapshot.json with format:"))
+        print(y('     {"active": [...], "expired": [...]}'))
+        print(y("  5. Run: python sync_evos.py --no-scrape futbin_snapshot.json --apply"))
+        print(y("  ────────────────────────────────────────────────────────────"))
+
+    print(f"\n  Scraped {b(str(len(active)))} active + {b(str(len(expired)))} expired evolutions.\n")
+    return active, expired
 
 
 def _parse_raw(raw_items, expired_flag=False):
@@ -228,7 +295,9 @@ def _parse_raw(raw_items, expired_flag=False):
         entry = {
             "name":      normalise_name(item["name"]),
             "ps":        item.get("ps", []),
+            "psCaps":    item.get("psCaps", []),
             "plus":      item.get("plus", []),
+            "plusCaps":  item.get("plusCaps", []),
             "days_left": days,
             "expires":   expires_iso,
             "exp":       expired_flag,
@@ -245,81 +314,7 @@ def _parse_raw(raw_items, expired_flag=False):
     return output
 
 
-def scrape_futbin() -> tuple[list[dict], list[dict]]:
-    """Scrape active + expired evolutions. Returns (active, expired)."""
-    from playwright.sync_api import sync_playwright
 
-    print(f"\n{b('Launching browser')}")
-
-    with sync_playwright() as p:
-        browser = p.chromium.launch(
-            headless=True,
-            args=[
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-blink-features=AutomationControlled",
-                "--disable-infobars",
-                "--disable-dev-shm-usage",
-                "--disable-gpu",
-                "--window-size=1280,900",
-            ],
-        )
-        ctx = browser.new_context(
-            user_agent=(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/124.0.0.0 Safari/537.36"
-            ),
-            viewport={"width": 1280, "height": 900},
-            locale="en-GB",
-            timezone_id="Europe/London",
-            java_script_enabled=True,
-            extra_http_headers={
-                "Accept-Language": "en-GB,en;q=0.9",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-            },
-        )
-        ctx.add_init_script("""
-            Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-            Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] });
-            Object.defineProperty(navigator, 'languages', { get: () => ['en-GB', 'en'] });
-            window.chrome = { runtime: {} };
-        """)
-
-        page = ctx.new_page()
-        known_ps = KNOWN_PLAYSTYLES
-
-        # ── Active evolutions ─────────────────────────────────────
-        print(f"\n{b('Active evolutions')}")
-        _load_page(page, "https://www.futbin.com/evolutions", "active")
-        raw_active = page.evaluate(SCRAPER_JS, known_ps)
-
-        # ── Expired evolutions ────────────────────────────────────
-        print(f"\n{b('Expired evolutions')}")
-        _load_page(page, "https://www.futbin.com/evolutions/expired", "expired")
-        raw_expired = page.evaluate(SCRAPER_JS, known_ps)
-
-        browser.close()
-
-    print(f"\n{b('Parsing active...')}")
-    active  = _parse_raw(raw_active,  expired_flag=False)
-    print(f"\n{b('Parsing expired...')}")
-    expired = _parse_raw(raw_expired, expired_flag=True)
-
-    # Deduplicate each list by name
-    def dedup(lst):
-        seen, out = set(), []
-        for e in lst:
-            k = e["name"].lower()
-            if k not in seen:
-                seen.add(k); out.append(e)
-        return out
-
-    active  = dedup(active)
-    expired = dedup(expired)
-
-    print(f"\n  Scraped {b(str(len(active)))} active + {b(str(len(expired)))} expired evolutions.\n")
-    return active, expired
 
 
 
@@ -463,6 +458,11 @@ def js_array(lst):
     items = ', '.join(f'"{v}"' for v in lst)
     return f'[{items}]'
 
+def js_num_array(lst):
+    """Format a list of numbers (or None) as a JS array."""
+    items = ', '.join('null' if v is None else str(v) for v in lst)
+    return f'[{items}]'
+
 
 def patch_html(html, diff):
     m = RAW_DATA_RE.search(html)
@@ -531,29 +531,33 @@ def patch_html(html, diff):
     # 3. Prepend new active evos
     new_lines = []
     for evo in diff['new_evos']:
-        exp_field  = f', "expires": "{evo["expires"]}"' if evo.get('expires') else ''
-        ps_field   = js_array(evo.get('ps', []))
-        plus_field = js_array(evo.get('plus', []))
+        exp_field    = f', "expires": "{evo["expires"]}"' if evo.get('expires') else ''
+        ps_field     = js_array(evo.get('ps', []))
+        ps_caps_field = f', psCaps: {js_num_array(evo.get("psCaps", []))}' if evo.get('psCaps') else ''
+        plus_field   = js_array(evo.get('plus', []))
+        plus_caps_field = f', plusCaps: {js_num_array(evo.get("plusCaps", []))}' if evo.get('plusCaps') else ''
         pos_field       = f', pos: "{evo["pos"]}"'           if evo.get("pos")       else ''
         rating_field    = f', maxRating: {evo["maxRating"]}'   if evo.get("maxRating") else ''
         boost_field     = f', ovrBoost: "{evo["ovrBoost"]}"' if evo.get("ovrBoost") else ''
         cap_field       = f', ovrCap: {evo["ovrCap"]}'          if evo.get("ovrCap")   else ''
         new_lines.append(
-            f'\n        {{ name: "{evo["name"]}", ps: {ps_field}, plus: {plus_field}, exp: false{exp_field}{pos_field}{rating_field}{boost_field}{cap_field} }},  // AUTO-ADDED'
+            f'\n        {{ name: "{evo["name"]}", ps: {ps_field}{ps_caps_field}, plus: {plus_field}{plus_caps_field}, exp: false{exp_field}{pos_field}{rating_field}{boost_field}{cap_field} }},  // AUTO-ADDED'
         )
 
     # 4. Append new expired evos (scraped from /evolutions/expired, not seen before)
     expired_lines = []
     for evo in diff.get('new_expired', []):
-        exp_field  = f', "expires": "{evo["expires"]}"' if evo.get('expires') else ''
-        ps_field   = js_array(evo.get('ps', []))
-        plus_field = js_array(evo.get('plus', []))
+        exp_field    = f', "expires": "{evo["expires"]}"' if evo.get('expires') else ''
+        ps_field     = js_array(evo.get('ps', []))
+        ps_caps_field_e = f', psCaps: {js_num_array(evo.get("psCaps", []))}' if evo.get('psCaps') else ''
+        plus_field   = js_array(evo.get('plus', []))
+        plus_caps_field_e = f', plusCaps: {js_num_array(evo.get("plusCaps", []))}' if evo.get('plusCaps') else ''
         pos_field_e    = f', pos: "{evo["pos"]}"'           if evo.get("pos")       else ''
         rating_field_e = f', maxRating: {evo["maxRating"]}'   if evo.get("maxRating") else ''
         boost_field_e  = f', ovrBoost: "{evo["ovrBoost"]}"' if evo.get("ovrBoost") else ''
         cap_field_e    = f', ovrCap: {evo["ovrCap"]}'          if evo.get("ovrCap")   else ''
         expired_lines.append(
-            f'\n        {{ name: "{evo["name"]}", ps: {ps_field}, plus: {plus_field}, exp: true{exp_field}{pos_field_e}{rating_field_e}{boost_field_e}{cap_field_e} }},  // AUTO-ADDED (expired)'
+            f'\n        {{ name: "{evo["name"]}", ps: {ps_field}{ps_caps_field_e}, plus: {plus_field}{plus_caps_field_e}, exp: true{exp_field}{pos_field_e}{rating_field_e}{boost_field_e}{cap_field_e} }},  // AUTO-ADDED (expired)'
         )
 
     if new_lines or expired_lines:
@@ -565,6 +569,88 @@ def patch_html(html, diff):
     # otherwise be appended to it, making it invisible to the JS parser.
     block = block.rstrip('\n') + '\n    '
     return html[:m.start()] + m.group(1) + block + m.group(3) + html[m.end():]
+
+
+def inject_ps_cap_display(html):
+    """Idempotent: update buildRow to render [icon] cap for each playstyle,
+    with base PS in a 5-column auto-fit grid (max 2 rows for 10 icons)."""
+    if 'psCaps' in html and 'ps-cap' in html:
+        return html  # already patched
+
+    # ── CSS ──────────────────────────────────────────────────────────────────
+    OLD_ICON_CSS = '.ps-icon { width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }'
+    NEW_ICON_CSS = (
+        '.ps-icon-wrap { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; }'
+        '\n        .ps-icon { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }'
+        '\n        .ps-cap { font-size: 0.65rem; color: #fff; font-weight: bold; white-space: nowrap; }'
+        '\n        .ps-base-row { display: grid; grid-template-columns: repeat(auto-fit, 32px); max-width: 180px; gap: 5px; }'
+    )
+    if OLD_ICON_CSS in html:
+        html = html.replace(OLD_ICON_CSS, NEW_ICON_CSS)
+
+    # ── icon-row gap ─────────────────────────────────────────────────────────
+    OLD_ICON_ROW = '.icon-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }'
+    NEW_ICON_ROW = '.icon-row { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }'
+    if OLD_ICON_ROW in html:
+        html = html.replace(OLD_ICON_ROW, NEW_ICON_ROW)
+
+    # ── column widths ─────────────────────────────────────────────────────────
+    html = html.replace(
+        'style="width: 30%;" onclick="sortBy(\'name\')"',
+        'style="width: 20%;" onclick="sortBy(\'name\')"'
+    )
+    html = html.replace(
+        'data-col="ps"        onclick="sortBy(\'ps\')"',
+        'data-col="ps"        style="width: 26%;" onclick="sortBy(\'ps\')"'
+    )
+    html = html.replace(
+        'data-col="plus"      onclick="sortBy(\'plus\')"',
+        'data-col="plus"      style="width: 20%;" onclick="sortBy(\'plus\')"'
+    )
+
+    # ── JS: base playstyles cell uses ps-base-row grid ────────────────────────
+    OLD_PS_TD = '<td><div class="icon-row">${psHTML}</div></td>'
+    NEW_PS_TD = '<td><div class="icon-row ps-base-row">${psHTML}</div></td>'
+    if OLD_PS_TD in html:
+        html = html.replace(OLD_PS_TD, NEW_PS_TD)
+
+    # ── JS: base playstyle map function ───────────────────────────────────────
+    OLD_PS = (
+        "        const psHTML = evo.ps.length > 0 ? evo.ps.map(p => {\n"
+        "            const d = playstyleMap[p];\n"
+        "            return d ? `<img src=\"${d.folder}/${d.file}_standard.png\" class=\"ps-icon\" title=\"${p}\">` : `<span>${p}</span>`;\n"
+        "        }).join('') : '<span class=\"no-data\">N/A</span>';"
+    )
+    NEW_PS = (
+        "        const psHTML = evo.ps.length > 0 ? evo.ps.map((p, i) => {\n"
+        "            const d = playstyleMap[p];\n"
+        "            const cap = (evo.psCaps || [])[i];\n"
+        "            const capStr = cap != null ? `<span class=\"ps-cap\">${cap}</span>` : '';\n"
+        "            return d ? `<span class=\"ps-icon-wrap\"><img src=\"${d.folder}/${d.file}_standard.png\" class=\"ps-icon\" title=\"${p}\">${capStr}</span>` : `<span>${p}</span>`;\n"
+        "        }).join('') : '<span class=\"no-data\">N/A</span>';"
+    )
+    if OLD_PS in html:
+        html = html.replace(OLD_PS, NEW_PS)
+
+    # ── JS: plus playstyle map function ───────────────────────────────────────
+    OLD_PLUS = (
+        "        const plusHTML = evo.plus.length > 0 ? evo.plus.map(p => {\n"
+        "            const d = playstyleMap[p];\n"
+        "            return d ? `<img src=\"${d.folder}/${d.file}_plus.png\" class=\"ps-icon plus-icon\" title=\"${p}+\">` : `<span>${p}+</span>`;\n"
+        "        }).join('') : '<span class=\"no-data\">N/A</span>';"
+    )
+    NEW_PLUS = (
+        "        const plusHTML = evo.plus.length > 0 ? evo.plus.map((p, i) => {\n"
+        "            const d = playstyleMap[p];\n"
+        "            const cap = (evo.plusCaps || [])[i];\n"
+        "            const capStr = cap != null ? `<span class=\"ps-cap\">${cap}</span>` : '';\n"
+        "            return d ? `<span class=\"ps-icon-wrap\"><img src=\"${d.folder}/${d.file}_plus.png\" class=\"ps-icon plus-icon\" title=\"${p}+\">${capStr}</span>` : `<span>${p}+</span>`;\n"
+        "        }).join('') : '<span class=\"no-data\">N/A</span>';"
+    )
+    if OLD_PLUS in html:
+        html = html.replace(OLD_PLUS, NEW_PLUS)
+
+    return html
 
 
 def inject_expiry_display(html):
@@ -703,6 +789,7 @@ def main():
     if args.apply:
         updated_html = patch_html(html, diff)
         updated_html = inject_expiry_display(updated_html)
+        updated_html = inject_ps_cap_display(updated_html)
         html_path.write_text(updated_html, encoding='utf-8')
         print(f"\n  {g('✅ index.html updated!')} → {html_path}")
         print(f"  Commit & push to GitHub to go live.\n")
