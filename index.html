@@ -32,10 +32,11 @@
         .active-row { border-left: 4px solid #00ffcc; }
 
         /* Playstyles */
-        .icon-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .icon-row { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+        .ps-base-row { display: grid; grid-template-columns: repeat(auto-fit, 32px); max-width: 180px; gap: 5px; }
         .ps-icon-wrap { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; }
-        .ps-icon { width: 38px; height: 38px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
-        .ps-cap { font-size: 0.6rem; color: #888; white-space: nowrap; }
+        .ps-icon { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+        .ps-cap { font-size: 0.65rem; color: #fff; font-weight: bold; white-space: nowrap; }
         .plus-icon { border: 2px solid #ffcc00; border-radius: 6px; background: rgba(255, 204, 0, 0.15); padding: 1px; }
         
         .status-tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; background: #333; color: #888; font-weight: normal; display: inline-block; }
@@ -67,12 +68,12 @@
     <table id="evoTable">
         <thead>
             <tr>
-                <th class="sortable" data-col="name"      style="width: 30%;" onclick="sortBy('name')">Evolution</th>
+                <th class="sortable" data-col="name"      style="width: 20%;" onclick="sortBy('name')">Evolution</th>
                 <th class="sortable" data-col="pos"       style="width: 8%;"  onclick="sortBy('pos')">Position</th>
                 <th class="sortable" data-col="maxRating" style="width: 8%;"  onclick="sortBy('maxRating')">Max OVR</th>
                 <th class="sortable" data-col="ovrBoost"  style="width: 6%;"  onclick="sortBy('ovrBoost')">OVR+</th>
-                <th class="sortable" data-col="ps"        onclick="sortBy('ps')">Base Playstyles</th>
-                <th class="sortable" data-col="plus"      onclick="sortBy('plus')">Playstyles+ (Plus)</th>
+                <th class="sortable" data-col="ps"        style="width: 26%;" onclick="sortBy('ps')">Base Playstyles</th>
+                <th class="sortable" data-col="plus"      style="width: 20%;" onclick="sortBy('plus')">Playstyles+ (Plus)</th>
             </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -125,7 +126,7 @@
     // Full unique dataset (Active + your complete Expired list)
     const rawData = [
         // ── AUTO-ADDED by sync_evos.py ──
-        { name: "TOTS Career Path II - RM", ps: ["Rapid", "Pinged Pass", "Technical"], psCaps: [7, 7, 7], plus: ["Finesse Shot"], plusCaps: [3], exp: false, "expires": "2026-05-25", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
+        { name: "Elite Link-Up", ps: [], plus: [], exp: false, "expires": "2026-05-26", maxRating: 89 },  // AUTO-ADDED{ name: "TOTS Career Path II - RM", ps: ["Rapid", "Pinged Pass", "Technical"], psCaps: [7, 7, 7], plus: ["Finesse Shot"], plusCaps: [3], exp: false, "expires": "2026-05-25", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
         { name: "TOTS Career Path II - CAM", ps: ["Tiki Taka", "First Touch", "Finesse Shot"], psCaps: [7, 7, 7], plus: ["Incisive Pass"], plusCaps: [3], exp: false, "expires": "2026-05-25", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
         { name: "TOTS Career Path II - LM", ps: ["Rapid", "Pinged Pass", "Technical"], psCaps: [7, 7, 7], plus: ["Finesse Shot"], plusCaps: [3], exp: false, "expires": "2026-05-25", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
         { name: "Five Star Phenom", ps: [], plus: [], exp: false, "expires": "2026-05-25", maxRating: 89 },  // AUTO-ADDED
@@ -140,7 +141,7 @@
         { name: "Maestro Unbound", ps: ["Incisive Pass", "Pinged Pass", "Tiki Taka", "Inventive", "Long Ball Pass", "Whipped Pass"], psCaps: [8, 8, 8, 8, 8, 8], plus: [], exp: false, "expires": "2026-05-20" },  // AUTO-ADDED
         { name: "TOTS Honourable Mentions", ps: [], plus: [], exp: false, "expires": "2026-05-23" },  // AUTO-ADDED
         { name: "Cat Like Reflexes", ps: ["Pinged Pass", "Footwork"], psCaps: [8, 8], plus: ["Far Reach", "Rush Out"], plusCaps: [2, 2], exp: false, "expires": "2026-05-19", pos: "GK", maxRating: 90, ovrBoost: "+15", ovrCap: 92 },  // AUTO-ADDED
-        { name: "Le Président", ps: ["Bruiser", "Jockey", "Technical", "First Touch"], psCaps: [7, 7, 7, 7], plus: ["Intercept", "Anticipate", "Aerial Fortress"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-05-18T16:06:43Z", pos: "CB", maxRating: 90, ovrBoost: "+20", ovrCap: 92 },  // AUTO-ADDED
+        { name: "Le Président", ps: ["Bruiser", "Jockey", "Technical", "First Touch"], psCaps: [7, 7, 7, 7], plus: ["Intercept", "Anticipate", "Aerial Fortress"], plusCaps: [3, 3, 3], exp: true, "expires": "2026-05-18T16:06:43Z", pos: "CB", maxRating: 90, ovrBoost: "+20", ovrCap: 92 },  // AUTO-ADDED
         { name: "Welsh Wonder Strike", ps: ["Acrobatic", "Finesse Shot", "Power Shot", "Quick Step"], psCaps: [8, 8, 8, 8], plus: ["Rapid", "Low Driven Shot"], plusCaps: [2, 2], exp: false, "expires": "2026-09-15", maxRating: 87, ovrBoost: "+15", ovrCap: 89 },  // AUTO-ADDED
         { name: "Il Capitano", ps: ["Pinged Pass", "Jockey", "Quick Step"], psCaps: [8, 8, 8], plus: ["Intercept", "Anticipate"], plusCaps: [2, 2], exp: false, "expires": "2026-09-15", pos: "CB", maxRating: 89, ovrBoost: "+30", ovrCap: 91 },  // AUTO-ADDED
         { name: "Jockey+ & Bruiser+", ps: [], plus: ["Jockey", "Bruiser"], plusCaps: [2, 2], exp: false, "expires": "2026-06-01", maxRating: 89 },  // AUTO-ADDED
@@ -778,6 +779,7 @@
            
     
     
+    
     ];
 
     function init() {
@@ -943,14 +945,14 @@
         const psHTML = evo.ps.length > 0 ? evo.ps.map((p, i) => {
             const d = playstyleMap[p];
             const cap = (evo.psCaps || [])[i];
-            const capStr = cap != null ? `<span class="ps-cap">| ${cap}</span>` : '';
+            const capStr = cap != null ? `<span class="ps-cap">${cap}</span>` : '';
             return d ? `<span class="ps-icon-wrap"><img src="${d.folder}/${d.file}_standard.png" class="ps-icon" title="${p}">${capStr}</span>` : `<span>${p}</span>`;
         }).join('') : '<span class="no-data">N/A</span>';
 
         const plusHTML = evo.plus.length > 0 ? evo.plus.map((p, i) => {
             const d = playstyleMap[p];
             const cap = (evo.plusCaps || [])[i];
-            const capStr = cap != null ? `<span class="ps-cap">| ${cap}</span>` : '';
+            const capStr = cap != null ? `<span class="ps-cap">${cap}</span>` : '';
             return d ? `<span class="ps-icon-wrap"><img src="${d.folder}/${d.file}_plus.png" class="ps-icon plus-icon" title="${p}+">${capStr}</span>` : `<span>${p}+</span>`;
         }).join('') : '<span class="no-data">N/A</span>';
 
@@ -979,7 +981,7 @@
             <td>${posHTML}</td>
             <td>${ratingHTML}</td>
             <td>${boostHTML}</td>
-            <td><div class="icon-row">${psHTML}</div></td>
+            <td><div class="icon-row ps-base-row">${psHTML}</div></td>
             <td><div class="icon-row">${plusHTML}</div></td>
         `;
         return row;
