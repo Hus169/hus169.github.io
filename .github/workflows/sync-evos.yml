@@ -23,6 +23,7 @@ jobs:
         run: |
           pip install playwright --break-system-packages
           playwright install chromium --with-deps
+          pip install cloudscraper beautifulsoup4
 
       - name: Run sync
         run: python sync_evos.py --apply
