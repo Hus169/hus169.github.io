@@ -197,11 +197,11 @@ def _parse_card_bs4(card, known_ps):
     }
 
 
-def _fetch_evos_bs4(scraper, url, label):
+def _fetch_evos_bs4(session, url, label):
     """Fetch one futbin evolutions page, return list of raw dicts."""
     from bs4 import BeautifulSoup
     print(f"  → {label}: {url}")
-    resp = scraper.get(url, timeout=40)
+    resp = session.get(url, timeout=40)
     soup = BeautifulSoup(resp.text, 'html.parser')
     cards = soup.select('.evolutions-overview-wrapper')
     print(f"    Found {len(cards)} card(s)")
@@ -218,14 +218,27 @@ def _fetch_evos_bs4(scraper, url, label):
 
 def scrape_futbin() -> tuple[list[dict], list[dict]]:
     """Scrape active + expired evolutions. Returns (active, expired).
-    Uses cloudscraper + BeautifulSoup — no browser required (Termux-safe).
+    Uses curl_cffi to impersonate Chrome TLS fingerprint (bypasses Cloudflare).
+    Falls back to cloudscraper if curl_cffi is unavailable.
     """
     try:
-        import cloudscraper
+        from curl_cffi import requests as cffi_requests
+        session = cffi_requests.Session(impersonate="chrome124")
+        print(f"\n{b('Fetching pages (curl_cffi / Chrome TLS)')}")
     except ImportError:
-        print(r("cloudscraper not installed. Run:"))
-        print(r("  pip install cloudscraper beautifulsoup4"))
-        sys.exit(1)
+        try:
+            import cloudscraper
+            session = cloudscraper.create_scraper(
+                browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False}
+            )
+            print(f"\n{b('Fetching pages (cloudscraper fallback)')}")
+            print(y("  Tip: install curl_cffi for better Cloudflare bypass:"))
+            print(y("       pip install curl_cffi"))
+        except ImportError:
+            print(r("No HTTP scraping library found. Run:"))
+            print(r("  pip install curl_cffi beautifulsoup4"))
+            sys.exit(1)
+
     try:
         from bs4 import BeautifulSoup  # noqa: F401 — verify import
     except ImportError:
@@ -233,16 +246,11 @@ def scrape_futbin() -> tuple[list[dict], list[dict]]:
         print(r("  pip install beautifulsoup4"))
         sys.exit(1)
 
-    print(f"\n{b('Fetching pages (no browser needed)')}")
-    scraper = cloudscraper.create_scraper(
-        browser={'browser': 'chrome', 'platform': 'windows', 'mobile': False}
-    )
-
     print(f"\n{b('Active evolutions')}")
-    raw_active  = _fetch_evos_bs4(scraper, "https://www.futbin.com/evolutions",         "active")
+    raw_active  = _fetch_evos_bs4(session, "https://www.futbin.com/evolutions",         "active")
 
     print(f"\n{b('Expired evolutions')}")
-    raw_expired = _fetch_evos_bs4(scraper, "https://www.futbin.com/evolutions/expired",  "expired")
+    raw_expired = _fetch_evos_bs4(session, "https://www.futbin.com/evolutions/expired",  "expired")
 
     print(f"\n{b('Parsing active...')}")
     active  = _parse_raw(raw_active,  expired_flag=False)
