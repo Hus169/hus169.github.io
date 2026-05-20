@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install cloudscraper beautifulsoup4
+          pip install cloudscraper beautifulsoup4 curl_cffi
 
       - name: Run sync
         run: python sync_evos.py --apply
