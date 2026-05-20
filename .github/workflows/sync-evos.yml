@@ -21,8 +21,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install playwright --break-system-packages
-          playwright install chromium --with-deps
           pip install cloudscraper beautifulsoup4
 
       - name: Run sync
