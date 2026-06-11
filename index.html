@@ -126,36 +126,93 @@
     // Full unique dataset (Active + your complete Expired list)
     const rawData = [
         // ── AUTO-ADDED by sync_evos.py ──
-        { name: "TOTS Career Path III - CM", ps: ["Press Proven", "Pinged Pass", "Inventive", "Anticipate"], psCaps: [7, 7, 7, 7], plus: ["Intercept", "Tiki Taka"], plusCaps: [3, 3], exp: false, "expires": "2026-05-27", maxRating: 91, ovrBoost: "+2", ovrCap: 93 },  // AUTO-ADDED
-        { name: "TOTS Career Path III - RW", ps: ["Low Driven Shot", "First Touch", "Gamechanger", "Whipped Pass"], psCaps: [7, 7, 7, 7], plus: ["Rapid", "Pinged Pass"], plusCaps: [3, 3], exp: false, "expires": "2026-05-27", maxRating: 91, ovrBoost: "+2", ovrCap: 93 },  // AUTO-ADDED
-        { name: "TOTS Career Path III - LW", ps: ["Low Driven Shot", "First Touch", "Gamechanger", "Whipped Pass"], psCaps: [7, 7, 7, 7], plus: ["Rapid", "Pinged Pass"], plusCaps: [3, 3], exp: false, "expires": "2026-05-27", maxRating: 91, ovrBoost: "+2", ovrCap: 93 },  // AUTO-ADDED
-        { name: "Defensive Masterclass", ps: ["Anticipate", "Intercept", "Quick Step", "Jockey", "Block", "Bruiser"], psCaps: [8, 8, 8, 8, 8, 8], plus: [], exp: false, "expires": "2026-05-27" },  // AUTO-ADDED
-        { name: "Sterling Ascension", ps: [], plus: ["Quick Step", "Pinged Pass", "Press Proven"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-03", maxRating: 74, ovrBoost: "+25", ovrCap: 92 },  // AUTO-ADDED
-        { name: "Attacking Excellence", ps: ["Finesse Shot", "Incisive Pass", "Pinged Pass", "Quick Step", "Technical"], psCaps: [7, 7, 7, 7, 7], plus: [], exp: false, "expires": "2026-05-27", maxRating: 90 },  // AUTO-ADDED
-        { name: "Defensive Perfection", ps: ["Intercept", "Anticipate", "Jockey", "Quick Step", "Bruiser"], psCaps: [7, 7, 7, 7, 7], plus: [], exp: false, "expires": "2026-05-27", maxRating: 90 },  // AUTO-ADDED
-        { name: "Far Reach+", ps: [], plus: ["Far Reach"], plusCaps: [3], exp: false, "expires": "2026-05-22", pos: "GK", maxRating: 90 },  // AUTO-ADDED
-        { name: "Backline Instinct", ps: [], plus: [], exp: false, "expires": "2026-05-25", maxRating: 90 },  // AUTO-ADDED{ name: "Elite Link-Up", ps: [], plus: [], exp: false, "expires": "2026-05-26", maxRating: 89 },  // AUTO-ADDED{ name: "TOTS Career Path II - RM", ps: ["Rapid", "Pinged Pass", "Technical"], psCaps: [7, 7, 7], plus: ["Finesse Shot"], plusCaps: [3], exp: false, "expires": "2026-05-25", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
-        { name: "TOTS Career Path II - CAM", ps: ["Tiki Taka", "First Touch", "Finesse Shot"], psCaps: [7, 7, 7], plus: ["Incisive Pass"], plusCaps: [3], exp: false, "expires": "2026-05-25", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
-        { name: "TOTS Career Path II - LM", ps: ["Rapid", "Pinged Pass", "Technical"], psCaps: [7, 7, 7], plus: ["Finesse Shot"], plusCaps: [3], exp: false, "expires": "2026-05-25", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
-        { name: "Five Star Phenom", ps: [], plus: [], exp: false, "expires": "2026-05-25", maxRating: 89 },  // AUTO-ADDED
-        { name: "Total Football", ps: ["Technical", "First Touch", "Quick Step", "Inventive", "Trickster"], psCaps: [7, 7, 7, 7, 7], plus: ["Finesse Shot", "Tiki Taka", "Incisive Pass"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-05-25", pos: "CAM", maxRating: 91, ovrBoost: "+25", ovrCap: 93 },  // AUTO-ADDED
-        { name: "TOTS Career Path - Starter", ps: ["Quick Step", "Incisive Pass"], psCaps: [7, 7], plus: [], exp: false, "expires": "2026-05-25", pos: "ST", maxRating: 89, ovrBoost: "+45", ovrCap: 90 },  // AUTO-ADDED
-        { name: "Keep the Ball", ps: [], plus: [], exp: false, "expires": "2026-05-24", maxRating: 88 },  // AUTO-ADDED
-        { name: "Midfield Migration", ps: ["Quick Step", "Jockey", "Incisive Pass"], psCaps: [7, 7, 7], plus: ["Intercept", "Pinged Pass", "Technical"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-05-23", pos: "LB", maxRating: 89, ovrBoost: "+25", ovrCap: 91 },  // AUTO-ADDED
-        { name: "Quick Twitch", ps: [], plus: [], exp: false, "expires": "2026-05-22", maxRating: 88 },  // AUTO-ADDED
-        { name: "Tri-Control", ps: ["Technical", "Gamechanger", "First Touch"], psCaps: [7, 7, 7], plus: [], exp: false, "expires": "2026-05-21", maxRating: 89 },  // AUTO-ADDED
-        { name: "Quick Step+ and Jockey", ps: ["Jockey"], psCaps: [7], plus: ["Quick Step"], plusCaps: [3], exp: false, "expires": "2026-05-21", maxRating: 89 },  // AUTO-ADDED
-        { name: "Polished Pivot", ps: ["Tiki Taka", "Intercept", "Technical", "Bruiser", "Anticipate"], psCaps: [8, 8, 8, 8, 8], plus: ["Incisive Pass", "Pinged Pass"], plusCaps: [2, 2], exp: false, "expires": "2026-05-21", maxRating: 74 },  // AUTO-ADDED
-        { name: "Maestro Unbound", ps: ["Incisive Pass", "Pinged Pass", "Tiki Taka", "Inventive", "Long Ball Pass", "Whipped Pass"], psCaps: [8, 8, 8, 8, 8, 8], plus: [], exp: false, "expires": "2026-05-20" },  // AUTO-ADDED
-        { name: "TOTS Honourable Mentions", ps: [], plus: [], exp: false, "expires": "2026-05-23" },  // AUTO-ADDED
+        { name: "Backbone Brilliance", ps: [], plus: [], exp: false, "expires": "2026-06-18", maxRating: 90, ovrBoost: "+1" },  // AUTO-ADDED
+        { name: "Final Preparations", ps: [], plus: [], exp: false, "expires": "2026-06-18", maxRating: 90, ovrBoost: "+2" },  // AUTO-ADDED
+        { name: "Free Kick Mastery", ps: [], plus: ["Dead Ball"], plusCaps: [3], exp: false, "expires": "2026-06-18", maxRating: 90, ovrBoost: "+1" },  // AUTO-ADDED
+        { name: "Hawk Eye", ps: ["Low Driven Shot", "Rapid", "Relentless"], psCaps: [8, 8, 8], plus: ["Quick Step", "Finesse Shot", "Gamechanger"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-18", maxRating: 91, ovrBoost: "+20", ovrCap: 93 },  // AUTO-ADDED
+        { name: "Defence Wins Championships", ps: [], plus: [], exp: false, "expires": "2026-06-18", maxRating: 91 },  // AUTO-ADDED
+        { name: "Five Star Phenom II", ps: [], plus: [], exp: false, "expires": "2026-07-11", maxRating: 91 },  // AUTO-ADDED
+        { name: "Trequartista", ps: ["Quick Step", "Tiki Taka", "First Touch", "Incisive Pass", "Power Shot"], psCaps: [8, 8, 8, 8, 8], plus: ["Technical"], plusCaps: [3], exp: false, "expires": "2026-07-11", pos: "CM", maxRating: 91, ovrBoost: "+10", ovrCap: 93 },  // AUTO-ADDED
+        { name: "The Iron 9", ps: ["First Touch", "Tiki Taka", "Enforcer", "Incisive Pass"], psCaps: [8, 8, 8, 8], plus: ["Finesse Shot"], plusCaps: [3], exp: false, "expires": "2026-07-11", pos: "ST", maxRating: 91, ovrBoost: "+15", ovrCap: 93 },  // AUTO-ADDED
+        { name: "Inch Perfect", ps: ["Incisive Pass", "Tiki Taka", "Pinged Pass", "Inventive"], psCaps: [8, 8, 8, 8], plus: [], exp: false, "expires": "2026-06-16", maxRating: 91 },  // AUTO-ADDED
+        { name: "Meep Meep", ps: ["Anticipate", "Rapid", "Jockey", "Whipped Pass"], psCaps: [8, 8, 8, 8], plus: ["Quick Step", "Intercept", "Pinged Pass"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-15", pos: "LB", maxRating: 90, ovrBoost: "+20", ovrCap: 92 },  // AUTO-ADDED
+        { name: "FoF Pelé I - ST", ps: [], plus: ["Low Driven Shot"], plusCaps: [3], exp: false, "expires": "2026-07-11" },  // AUTO-ADDED
+        { name: "FoF Pelé I - RW/LW", ps: [], plus: ["Finesse Shot"], plusCaps: [3], exp: false, "expires": "2026-07-11" },  // AUTO-ADDED
+        { name: "FoF Pelé I - CM", ps: [], plus: ["Incisive Pass"], plusCaps: [3], exp: false, "expires": "2026-07-11" },  // AUTO-ADDED
+        { name: "Donovation", ps: ["Incisive Pass", "Gamechanger", "Rapid"], psCaps: [8, 8, 8], plus: ["Finesse Shot", "Technical", "Low Driven Shot"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-15", pos: "CAM", maxRating: 91, ovrBoost: "+30", ovrCap: 93 },  // AUTO-ADDED
+        { name: "Path to Glory Cosmetic", ps: [], plus: [], exp: false, "expires": "2026-06-25" },  // AUTO-ADDED
+        { name: "Anfield's Wall", ps: ["Intercept", "Slide Tackle", "Aerial Fortress"], psCaps: [7, 7, 7], plus: ["Bruiser", "Anticipate", "Jockey"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-14", pos: "CB or RB", maxRating: 90, ovrBoost: "+15", ovrCap: 93 },  // AUTO-ADDED
+        { name: "Pass, Eh", ps: ["Tiki Taka", "Incisive Pass", "Pinged Pass", "Inventive"], psCaps: [8, 8, 8, 8], plus: [], exp: false, "expires": "2026-09-09", maxRating: 91, ovrBoost: "+1" },  // AUTO-ADDED
+        { name: "Star Chaser", ps: ["Intercept", "Anticipate", "Aerial Fortress", "Inventive"], psCaps: [8, 8, 8, 8], plus: ["Quick Step", "Jockey"], plusCaps: [3, 3], exp: false, "expires": "2026-09-09", maxRating: 91, ovrBoost: "+3", ovrCap: 93 },  // AUTO-ADDED
+        { name: "Street Soccer", ps: ["Quick Step", "Tiki Taka", "Finesse Shot"], psCaps: [8, 8, 8], plus: ["Intercept", "Incisive Pass"], plusCaps: [3, 3], exp: false, "expires": "2026-09-09", pos: "CM", maxRating: 91, ovrBoost: "+35", ovrCap: 92 },  // AUTO-ADDED
+        { name: "El Kaiser", ps: ["Intercept", "Quick Step", "Dead Ball"], psCaps: [8, 8, 8], plus: ["Anticipate", "Bruiser"], plusCaps: [3, 3], exp: false, "expires": "2026-09-09", pos: "CB", maxRating: 91, ovrBoost: "+20", ovrCap: 93 },  // AUTO-ADDED
+        { name: "Memo's Legacy", ps: ["Footwork"], psCaps: [8], plus: ["Rush Out", "Far Reach"], plusCaps: [3, 3], exp: false, "expires": "2026-09-09", pos: "GK", maxRating: 91, ovrBoost: "+18", ovrCap: 92 },  // AUTO-ADDED
+        { name: "Chasing the Spotlight", ps: ["Incisive Pass", "Gamechanger"], psCaps: [8, 8], plus: ["Rapid", "Low Driven Shot"], plusCaps: [3, 3], exp: false, "expires": "2026-09-09", maxRating: 92, ovrBoost: "+3", ovrCap: 94 },  // AUTO-ADDED
+        { name: "Relentless Rise", ps: ["Incisive Pass", "Low Driven Shot", "Tiki Taka", "Rapid", "Quick Step", "Gamechanger"], psCaps: [8, 8, 8, 8, 8, 8], plus: ["Finesse Shot", "Technical"], plusCaps: [3, 3], exp: false, "expires": "2026-09-09", pos: "ST or LW or RW", maxRating: 91, ovrBoost: "+50", ovrCap: 92 },  // AUTO-ADDED
+        { name: "Try Again Tomorrow", ps: ["Anticipate", "Bruiser", "Quick Step", "Pinged Pass", "Intercept"], psCaps: [8, 8, 8, 8, 8], plus: [], exp: false, "expires": "2026-07-11", maxRating: 90, ovrBoost: "+2" },  // AUTO-ADDED
+        { name: "One Step Ahead", ps: ["Technical", "First Touch", "Trickster"], psCaps: [8, 8, 8], plus: [], exp: false, "expires": "2026-06-18", maxRating: 91 },  // AUTO-ADDED
+        { name: "Old School Winger", ps: ["Quick Step", "Technical", "First Touch", "Incisive Pass", "Pinged Pass"], psCaps: [8, 8, 8, 8, 8], plus: [], exp: false, "expires": "2026-07-11", maxRating: 90, ovrBoost: "+2", ovrCap: 92 },  // AUTO-ADDED
+        { name: "Gold Standard", ps: [], plus: [], exp: false, "expires": "2026-09-09", maxRating: 92, ovrBoost: "+50", ovrCap: 94 },  // AUTO-ADDED
+        { name: "Covering Ground", ps: ["Intercept", "First Touch", "Tiki Taka", "Technical", "Quick Step"], psCaps: [8, 8, 8, 8, 8], plus: [], exp: false, "expires": "2026-07-11", maxRating: 92, ovrBoost: "+3", ovrCap: 95 },  // AUTO-ADDED
+        { name: "Afterburner", ps: ["Rapid", "Quick Step"], psCaps: [8, 8], plus: [], exp: false, "expires": "2026-07-11", maxRating: 92, ovrBoost: "+1", ovrCap: 93 },  // AUTO-ADDED
+        { name: "No Looking Back", ps: ["Incisive Pass", "Rapid", "Finesse Shot", "Technical", "First Touch", "Gamechanger"], psCaps: [8, 8, 8, 8, 8, 8], plus: ["Quick Step"], plusCaps: [3], exp: false, "expires": "2026-07-11" },  // AUTO-ADDED
+        { name: "Deadeye", ps: ["Rapid", "Power Shot", "Gamechanger", "Chip Shot"], psCaps: [8, 8, 8, 8], plus: ["Finesse Shot", "Low Driven Shot"], plusCaps: [3, 3], exp: false, "expires": "2026-07-11", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
+        { name: "The Main Event", ps: ["Low Driven Shot", "Gamechanger", "Quick Step", "First Touch"], psCaps: [8, 8, 8, 8], plus: ["Finesse Shot", "Incisive Pass"], plusCaps: [4, 4], exp: false, "expires": "2026-09-09", pos: "ST", maxRating: 92, ovrBoost: "+50", ovrCap: 97 },  // AUTO-ADDED
+        { name: "Far Throw", ps: ["Far Throw"], psCaps: [8], plus: [], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
+        { name: "1v1 Close Down", ps: ["Rush Out"], psCaps: [8], plus: [], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
+        { name: "Cross Claimer", ps: ["Cross Claimer"], psCaps: [8], plus: [], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
+        { name: "Deflector", ps: ["Deflector"], psCaps: [8], plus: [], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
+        { name: "Footwork", ps: ["Footwork"], psCaps: [8], plus: [], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
+        { name: "Far Throw+", ps: [], plus: ["Far Throw"], plusCaps: [3], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
+        { name: "1v1 Close Down+", ps: [], plus: ["Rush Out"], plusCaps: [3], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
+        { name: "Cross Claimer+", ps: [], plus: ["Cross Claimer"], plusCaps: [3], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
+        { name: "Perfect Poise", ps: [], plus: ["Quick Step", "Press Proven", "Enforcer"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-13", maxRating: 90, ovrBoost: "+1" },  // AUTO-ADDED
+        { name: "Street Slick", ps: [], plus: [], exp: false, "expires": "2026-06-12", maxRating: 89 },  // AUTO-ADDED
+        { name: "Rock & Resolve", ps: ["Bruiser", "Anticipate", "Jockey", "Aerial Fortress", "Block", "Slide Tackle"], psCaps: [8, 8, 8, 8, 8, 8], plus: ["Intercept"], plusCaps: [2], exp: false, "expires": "2026-06-11T16:48:07Z" },  // AUTO-ADDED
+        { name: "Prime Heroes", ps: [], plus: [], exp: false, "expires": "2026-06-13" },  // AUTO-ADDED
+        { name: "Ultimate End", ps: [], plus: [], exp: false, "expires": "2026-06-11T16:48:07Z" },  // AUTO-ADDED
+        { name: "Perfect Timing", ps: [], plus: [], exp: false, "expires": "2026-06-12", maxRating: 90 },  // AUTO-ADDED
+        { name: "Born to Roam", ps: ["Incisive Pass", "Tiki Taka", "Intercept", "Relentless"], psCaps: [7, 7, 7, 7], plus: ["Technical", "Rapid", "Pinged Pass"], plusCaps: [3, 3, 3], exp: true, pos: "LM", maxRating: 90, ovrBoost: "+25", ovrCap: 92 },  // AUTO-ADDED (expired)
+        { name: "Goal Bound", ps: ["Finesse Shot", "Gamechanger", "Chip Shot", "Acrobatic", "Precision Header", "Power Shot"], psCaps: [8, 8, 8, 8, 8, 8], plus: ["Low Driven Shot"], plusCaps: [2], exp: true },  // AUTO-ADDED (expired)
+        { name: "Smooth Operator", ps: ["Technical", "Press Proven", "Intercept"], psCaps: [7, 7, 7], plus: ["First Touch"], plusCaps: [3], exp: true, maxRating: 89, ovrBoost: "+1" },  // AUTO-ADDED (expired)
+        { name: "History in Ten", ps: ["Precision Header", "Incisive Pass", "Power Shot"], psCaps: [7, 7, 7], plus: ["Finesse Shot", "Low Driven Shot", "Rapid"], plusCaps: [3, 3, 3], exp: true, pos: "ST", maxRating: 91, ovrBoost: "+30", ovrCap: 93 },  // AUTO-ADDED (expired)
+        { name: "The GOATkeeper", ps: ["Rush Out", "Long Ball Pass", "Deflector"], psCaps: [7, 7, 7], plus: ["Far Reach", "Pinged Pass", "Footwork"], plusCaps: [3, 3, 3], exp: true, pos: "GK", maxRating: 90, ovrBoost: "+15", ovrCap: 92 },  // AUTO-ADDED (expired)
+        { name: "Tater TOTS", ps: [], plus: [], exp: true, maxRating: 89 },  // AUTO-ADDED (expired)
+        { name: "Spinning Top", ps: [], plus: [], exp: true, maxRating: 89 },  // AUTO-ADDED (expired)
+        { name: "Dash & Dazzle", ps: ["Technical", "Quick Step", "First Touch", "Rapid", "Press Proven", "Trickster"], psCaps: [8, 8, 8, 8, 8, 8], plus: [], exp: true },  // AUTO-ADDED (expired)
+        { name: "Poldi's Strike", ps: ["Rapid", "Power Shot", "Enforcer"], psCaps: [7, 7, 7], plus: ["Low Driven Shot", "Quick Step", "Finesse Shot"], plusCaps: [3, 3, 3], exp: true, pos: "LW", maxRating: 89, ovrBoost: "+20", ovrCap: 91 },  // AUTO-ADDED (expired)
+        { name: "Polished Perfection", ps: ["Finesse Shot"], psCaps: [7], plus: ["Low Driven Shot", "Gamechanger"], plusCaps: [3, 3], exp: true, maxRating: 89, ovrBoost: "+5", ovrCap: 91 },  // AUTO-ADDED (expired)
+        { name: "Making the Case", ps: ["Incisive Pass", "Tiki Taka", "Bruiser", "Technical", "Block"], psCaps: [7, 7, 7, 7, 7], plus: ["Intercept", "Pinged Pass", "Anticipate"], plusCaps: [3, 3, 3], exp: true, pos: "CDM", maxRating: 91, ovrBoost: "+30", ovrCap: 93 },  // AUTO-ADDED (expired)
+        { name: "Composed Authority", ps: ["Intercept", "Block", "Aerial Fortress"], psCaps: [7, 7, 7], plus: ["Anticipate", "Jockey"], plusCaps: [3, 3], exp: true, pos: "CB", maxRating: 90, ovrBoost: "+10", ovrCap: 92 },  // AUTO-ADDED (expired){ name: "TOTS Career Path III - CM", ps: ["Press Proven", "Pinged Pass", "Inventive", "Anticipate"], psCaps: [7, 7, 7, 7], plus: ["Intercept", "Tiki Taka"], plusCaps: [3, 3], exp: true, "expires": "2026-05-27", maxRating: 91, ovrBoost: "+2", ovrCap: 93 },  // AUTO-ADDED
+        { name: "TOTS Career Path III - RW", ps: ["Low Driven Shot", "First Touch", "Gamechanger", "Whipped Pass"], psCaps: [7, 7, 7, 7], plus: ["Rapid", "Pinged Pass"], plusCaps: [3, 3], exp: true, "expires": "2026-05-27", maxRating: 91, ovrBoost: "+2", ovrCap: 93 },  // AUTO-ADDED
+        { name: "TOTS Career Path III - LW", ps: ["Low Driven Shot", "First Touch", "Gamechanger", "Whipped Pass"], psCaps: [7, 7, 7, 7], plus: ["Rapid", "Pinged Pass"], plusCaps: [3, 3], exp: true, "expires": "2026-05-27", maxRating: 91, ovrBoost: "+2", ovrCap: 93 },  // AUTO-ADDED
+        { name: "Defensive Masterclass", ps: ["Anticipate", "Intercept", "Quick Step", "Jockey", "Block", "Bruiser"], psCaps: [8, 8, 8, 8, 8, 8], plus: [], exp: true, "expires": "2026-05-27" },  // AUTO-ADDED
+        { name: "Sterling Ascension", ps: [], plus: ["Quick Step", "Pinged Pass", "Press Proven"], plusCaps: [3, 3, 3], exp: true, "expires": "2026-06-03", maxRating: 74, ovrBoost: "+25", ovrCap: 92 },  // AUTO-ADDED
+        { name: "Attacking Excellence", ps: ["Finesse Shot", "Incisive Pass", "Pinged Pass", "Quick Step", "Technical"], psCaps: [7, 7, 7, 7, 7], plus: [], exp: true, "expires": "2026-05-27", maxRating: 90 },  // AUTO-ADDED
+        { name: "Defensive Perfection", ps: ["Intercept", "Anticipate", "Jockey", "Quick Step", "Bruiser"], psCaps: [7, 7, 7, 7, 7], plus: [], exp: true, "expires": "2026-05-27", maxRating: 90 },  // AUTO-ADDED
+        { name: "Far Reach+", ps: [], plus: ["Far Reach"], plusCaps: [3], exp: true, "expires": "2026-05-22", pos: "GK", maxRating: 90 },  // AUTO-ADDED
+        { name: "Backline Instinct", ps: [], plus: [], exp: true, "expires": "2026-05-25", maxRating: 90 },  // AUTO-ADDED{ name: "Elite Link-Up", ps: [], plus: [], exp: true, "expires": "2026-05-26", maxRating: 89 },  // AUTO-ADDED{ name: "TOTS Career Path II - RM", ps: ["Rapid", "Pinged Pass", "Technical"], psCaps: [7, 7, 7], plus: ["Finesse Shot"], plusCaps: [3], exp: true, "expires": "2026-05-25", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
+        { name: "TOTS Career Path II - CAM", ps: ["Tiki Taka", "First Touch", "Finesse Shot"], psCaps: [7, 7, 7], plus: ["Incisive Pass"], plusCaps: [3], exp: true, "expires": "2026-05-25", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
+        { name: "TOTS Career Path II - LM", ps: ["Rapid", "Pinged Pass", "Technical"], psCaps: [7, 7, 7], plus: ["Finesse Shot"], plusCaps: [3], exp: true, "expires": "2026-05-25", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
+        { name: "Five Star Phenom", ps: [], plus: [], exp: true, "expires": "2026-05-25", maxRating: 89 },  // AUTO-ADDED
+        { name: "Total Football", ps: ["Technical", "First Touch", "Quick Step", "Inventive", "Trickster"], psCaps: [7, 7, 7, 7, 7], plus: ["Finesse Shot", "Tiki Taka", "Incisive Pass"], plusCaps: [3, 3, 3], exp: true, "expires": "2026-05-25", pos: "CAM", maxRating: 91, ovrBoost: "+25", ovrCap: 93 },  // AUTO-ADDED
+        { name: "TOTS Career Path - Starter", ps: ["Quick Step", "Incisive Pass"], psCaps: [7, 7], plus: [], exp: true, "expires": "2026-05-25", pos: "ST", maxRating: 89, ovrBoost: "+45", ovrCap: 90 },  // AUTO-ADDED
+        { name: "Keep the Ball", ps: [], plus: [], exp: true, "expires": "2026-05-24", maxRating: 88 },  // AUTO-ADDED
+        { name: "Midfield Migration", ps: ["Quick Step", "Jockey", "Incisive Pass"], psCaps: [7, 7, 7], plus: ["Intercept", "Pinged Pass", "Technical"], plusCaps: [3, 3, 3], exp: true, "expires": "2026-05-23", pos: "LB", maxRating: 89, ovrBoost: "+25", ovrCap: 91 },  // AUTO-ADDED
+        { name: "Quick Twitch", ps: [], plus: [], exp: true, "expires": "2026-05-22", maxRating: 88 },  // AUTO-ADDED
+        { name: "Tri-Control", ps: ["Technical", "Gamechanger", "First Touch"], psCaps: [7, 7, 7], plus: [], exp: true, "expires": "2026-05-21", maxRating: 89 },  // AUTO-ADDED
+        { name: "Quick Step+ and Jockey", ps: ["Jockey"], psCaps: [7], plus: ["Quick Step"], plusCaps: [3], exp: true, "expires": "2026-05-21", maxRating: 89 },  // AUTO-ADDED
+        { name: "Polished Pivot", ps: ["Tiki Taka", "Intercept", "Technical", "Bruiser", "Anticipate"], psCaps: [8, 8, 8, 8, 8], plus: ["Incisive Pass", "Pinged Pass"], plusCaps: [2, 2], exp: true, "expires": "2026-05-21", maxRating: 74 },  // AUTO-ADDED
+        { name: "Maestro Unbound", ps: ["Incisive Pass", "Pinged Pass", "Tiki Taka", "Inventive", "Long Ball Pass", "Whipped Pass"], psCaps: [8, 8, 8, 8, 8, 8], plus: [], exp: true, "expires": "2026-05-20" },  // AUTO-ADDED
+        { name: "TOTS Honourable Mentions", ps: [], plus: [], exp: true, "expires": "2026-05-23" },  // AUTO-ADDED
         { name: "Cat Like Reflexes", ps: ["Pinged Pass", "Footwork"], psCaps: [8, 8], plus: ["Far Reach", "Rush Out"], plusCaps: [2, 2], exp: true, "expires": "2026-05-19", pos: "GK", maxRating: 90, ovrBoost: "+15", ovrCap: 92 },  // AUTO-ADDED
         { name: "Le Président", ps: ["Bruiser", "Jockey", "Technical", "First Touch"], psCaps: [7, 7, 7, 7], plus: ["Intercept", "Anticipate", "Aerial Fortress"], plusCaps: [3, 3, 3], exp: true, "expires": "2026-05-18T16:06:43Z", pos: "CB", maxRating: 90, ovrBoost: "+20", ovrCap: 92 },  // AUTO-ADDED
         { name: "Welsh Wonder Strike", ps: ["Acrobatic", "Finesse Shot", "Power Shot", "Quick Step"], psCaps: [8, 8, 8, 8], plus: ["Rapid", "Low Driven Shot"], plusCaps: [2, 2], exp: false, "expires": "2026-09-15", maxRating: 87, ovrBoost: "+15", ovrCap: 89 },  // AUTO-ADDED
         { name: "Il Capitano", ps: ["Pinged Pass", "Jockey", "Quick Step"], psCaps: [8, 8, 8], plus: ["Intercept", "Anticipate"], plusCaps: [2, 2], exp: false, "expires": "2026-09-15", pos: "CB", maxRating: 89, ovrBoost: "+30", ovrCap: 91 },  // AUTO-ADDED
-        { name: "Jockey+ & Bruiser+", ps: [], plus: ["Jockey", "Bruiser"], plusCaps: [2, 2], exp: false, "expires": "2026-06-01", maxRating: 89 },  // AUTO-ADDED
-        { name: "WTSS Defender Boost", ps: [], plus: ["Intercept", "Anticipate", "Bruiser"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-01", maxRating: 74 },  // AUTO-ADDED
-        { name: "WTSS Attacker Boost", ps: [], plus: ["Finesse Shot", "Rapid", "Low Driven Shot"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-01", maxRating: 74 },  // AUTO-ADDED
-        { name: "Intercept+ & Quick Step+", ps: [], plus: ["Intercept", "Quick Step"], plusCaps: [2, 2], exp: false, "expires": "2026-06-01", maxRating: 89 },  // AUTO-ADDED
+        { name: "Jockey+ & Bruiser+", ps: [], plus: ["Jockey", "Bruiser"], plusCaps: [2, 2], exp: true, "expires": "2026-06-01", maxRating: 89 },  // AUTO-ADDED
+        { name: "WTSS Defender Boost", ps: [], plus: ["Intercept", "Anticipate", "Bruiser"], plusCaps: [3, 3, 3], exp: true, "expires": "2026-06-01", maxRating: 74 },  // AUTO-ADDED
+        { name: "WTSS Attacker Boost", ps: [], plus: ["Finesse Shot", "Rapid", "Low Driven Shot"], plusCaps: [3, 3, 3], exp: true, "expires": "2026-06-01", maxRating: 74 },  // AUTO-ADDED
+        { name: "Intercept+ & Quick Step+", ps: [], plus: ["Intercept", "Quick Step"], plusCaps: [2, 2], exp: true, "expires": "2026-06-01", maxRating: 89 },  // AUTO-ADDED
         { name: "WTSS Journey 3 - Defender", ps: ["Aerial Fortress", "Jockey", "Tiki Taka", "Slide Tackle"], psCaps: [8, 8, 8, 8], plus: ["Quick Step", "Bruiser"], plusCaps: [3, 3], exp: false, "expires": "2026-06-17", pos: "CB or LB or RB", maxRating: 90, ovrBoost: "+2", ovrCap: 92 },  // AUTO-ADDED
         { name: "WTSS Journey 3 - Midfielder", ps: ["Anticipate", "Quick Step", "First Touch", "Finesse Shot"], psCaps: [8, 8, 8, 8], plus: ["Intercept", "Tiki Taka"], plusCaps: [3, 3], exp: false, "expires": "2026-06-17", pos: "CM or CDM or CAM", maxRating: 90, ovrBoost: "+2", ovrCap: 92 },  // AUTO-ADDED
         { name: "WTSS Journey 2 - Midfielder", ps: ["Technical", "Bruiser", "Jockey"], psCaps: [8, 8, 8], plus: ["Incisive Pass"], plusCaps: [2], exp: false, "expires": "2026-06-17", pos: "CDM or CM or CAM", maxRating: 88, ovrBoost: "+50", ovrCap: 90 },  // AUTO-ADDED
@@ -785,6 +842,7 @@
         { name: "Rising Guard", ps: [], plus: [], exp: true, maxRating: 82 },  // AUTO-ADDED (expired)
 
            
+    
     
     
     
