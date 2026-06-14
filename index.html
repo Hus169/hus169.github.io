@@ -126,7 +126,17 @@
     // Full unique dataset (Active + your complete Expired list)
     const rawData = [
         // ── AUTO-ADDED by sync_evos.py ──
-        { name: "La Pulga", ps: ["Low Driven Shot", "Incisive Pass", "First Touch"], psCaps: [8, 8, 8], plus: ["Technical", "Finesse Shot", "Rapid"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-18", pos: "RM or RW", maxRating: 90, ovrBoost: "+20", ovrCap: 93 },  // AUTO-ADDED{ name: "Backbone Brilliance", ps: [], plus: [], exp: false, "expires": "2026-06-18", maxRating: 90, ovrBoost: "+1" },  // AUTO-ADDED
+        { name: "Path to Glory", ps: [], plus: [], exp: false, "expires": "2026-06-21" },  // AUTO-ADDED
+        { name: "Shadow Step", ps: [], plus: ["Rapid"], plusCaps: [3], exp: false, "expires": "2026-06-21", maxRating: 90, ovrBoost: "+1", ovrCap: 91 },  // AUTO-ADDED
+        { name: "Continental Cannon", ps: [], plus: ["Finesse Shot", "Low Driven Shot"], plusCaps: [3, 3], exp: false, "expires": "2026-09-12", maxRating: 91 },  // AUTO-ADDED
+        { name: "Golden Spirit", ps: ["Low Driven Shot", "Pinged Pass", "Finesse Shot"], psCaps: [8, 8, 8], plus: ["Rapid", "Quick Step"], plusCaps: [3, 3], exp: false, "expires": "2026-09-12", maxRating: 91, ovrBoost: "+30", ovrCap: 93 },  // AUTO-ADDED
+        { name: "Oxygen Tank", ps: ["Relentless", "Press Proven", "Incisive Pass"], psCaps: [8, 8, 8], plus: ["Quick Step", "Tiki Taka"], plusCaps: [3, 3], exp: false, "expires": "2026-09-12", maxRating: 91, ovrBoost: "+7", ovrCap: 93 },  // AUTO-ADDED
+        { name: "PhD In Dribbling", ps: [], plus: ["Technical"], plusCaps: [3], exp: false, "expires": "2026-09-12", maxRating: 91, ovrBoost: "+1" },  // AUTO-ADDED
+        { name: "Tiny Tim", ps: ["Finesse Shot", "Incisive Pass", "First Touch", "Precision Header"], psCaps: [8, 8, 8, 8], plus: ["Low Driven Shot", "Enforcer"], plusCaps: [3, 3], exp: false, "expires": "2026-09-12", pos: "ST", maxRating: 91, ovrBoost: "+25", ovrCap: 93 },  // AUTO-ADDED
+        { name: "The Kiwi Wall", ps: [], plus: [], exp: false, "expires": "2026-09-12", pos: "CB or LB or RB", maxRating: 91, ovrBoost: "+12", ovrCap: 93 },  // AUTO-ADDED
+        { name: "Hidden Gem", ps: ["Finesse Shot", "Trickster", "Pinged Pass", "Low Driven Shot", "Rapid"], psCaps: [8, 8, 8, 8, 8], plus: ["Technical", "Quick Step"], plusCaps: [3, 3], exp: false, "expires": "2026-09-12", pos: "LM or LW", maxRating: 91, ovrBoost: "+35", ovrCap: 93 },  // AUTO-ADDED
+        { name: "Hold the Fort", ps: ["Aerial Fortress", "Enforcer", "Block"], psCaps: [8, 8, 8], plus: ["Intercept", "Jockey"], plusCaps: [3, 3], exp: false, "expires": "2026-06-21", pos: "CB", maxRating: 91, ovrBoost: "+20", ovrCap: 94 },  // AUTO-ADDED
+        { name: "Go on Son", ps: ["Gamechanger", "Power Shot"], psCaps: [8, 8], plus: ["Finesse Shot", "Low Driven Shot"], plusCaps: [3, 3], exp: false, "expires": "2026-06-21", maxRating: 90, ovrBoost: "+1", ovrCap: 92 },  // AUTO-ADDED{ name: "La Pulga", ps: ["Low Driven Shot", "Incisive Pass", "First Touch"], psCaps: [8, 8, 8], plus: ["Technical", "Finesse Shot", "Rapid"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-18", pos: "RM or RW", maxRating: 90, ovrBoost: "+20", ovrCap: 93 },  // AUTO-ADDED{ name: "Backbone Brilliance", ps: [], plus: [], exp: false, "expires": "2026-06-18", maxRating: 90, ovrBoost: "+1" },  // AUTO-ADDED
         { name: "Final Preparations", ps: [], plus: [], exp: false, "expires": "2026-06-18", maxRating: 90, ovrBoost: "+2" },  // AUTO-ADDED
         { name: "Free Kick Mastery", ps: [], plus: ["Dead Ball"], plusCaps: [3], exp: false, "expires": "2026-06-18", maxRating: 90, ovrBoost: "+1" },  // AUTO-ADDED
         { name: "Hawk Eye", ps: ["Low Driven Shot", "Rapid", "Relentless"], psCaps: [8, 8, 8], plus: ["Quick Step", "Finesse Shot", "Gamechanger"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-18", maxRating: 91, ovrBoost: "+20", ovrCap: 93 },  // AUTO-ADDED
@@ -166,12 +176,12 @@
         { name: "Far Throw+", ps: [], plus: ["Far Throw"], plusCaps: [3], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
         { name: "1v1 Close Down+", ps: [], plus: ["Rush Out"], plusCaps: [3], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
         { name: "Cross Claimer+", ps: [], plus: ["Cross Claimer"], plusCaps: [3], exp: false, "expires": "2027-05-07", pos: "GK" },  // AUTO-ADDED
-        { name: "Perfect Poise", ps: [], plus: ["Quick Step", "Press Proven", "Enforcer"], plusCaps: [3, 3, 3], exp: false, "expires": "2026-06-13", maxRating: 90, ovrBoost: "+1" },  // AUTO-ADDED
-        { name: "Street Slick", ps: [], plus: [], exp: false, "expires": "2026-06-12", maxRating: 89 },  // AUTO-ADDED
-        { name: "Rock & Resolve", ps: ["Bruiser", "Anticipate", "Jockey", "Aerial Fortress", "Block", "Slide Tackle"], psCaps: [8, 8, 8, 8, 8, 8], plus: ["Intercept"], plusCaps: [2], exp: false, "expires": "2026-06-11T16:48:07Z" },  // AUTO-ADDED
-        { name: "Prime Heroes", ps: [], plus: [], exp: false, "expires": "2026-06-13" },  // AUTO-ADDED
-        { name: "Ultimate End", ps: [], plus: [], exp: false, "expires": "2026-06-11T16:48:07Z" },  // AUTO-ADDED
-        { name: "Perfect Timing", ps: [], plus: [], exp: false, "expires": "2026-06-12", maxRating: 90 },  // AUTO-ADDED
+        { name: "Perfect Poise", ps: [], plus: ["Quick Step", "Press Proven", "Enforcer"], plusCaps: [3, 3, 3], exp: true, "expires": "2026-06-13", maxRating: 90, ovrBoost: "+1" },  // AUTO-ADDED
+        { name: "Street Slick", ps: [], plus: [], exp: true, "expires": "2026-06-12", maxRating: 89 },  // AUTO-ADDED
+        { name: "Rock & Resolve", ps: ["Bruiser", "Anticipate", "Jockey", "Aerial Fortress", "Block", "Slide Tackle"], psCaps: [8, 8, 8, 8, 8, 8], plus: ["Intercept"], plusCaps: [2], exp: true, "expires": "2026-06-11T16:48:07Z" },  // AUTO-ADDED
+        { name: "Prime Heroes", ps: [], plus: [], exp: true, "expires": "2026-06-13" },  // AUTO-ADDED
+        { name: "Ultimate End", ps: [], plus: [], exp: true, "expires": "2026-06-11T16:48:07Z" },  // AUTO-ADDED
+        { name: "Perfect Timing", ps: [], plus: [], exp: true, "expires": "2026-06-12", maxRating: 90 },  // AUTO-ADDED
         { name: "Born to Roam", ps: ["Incisive Pass", "Tiki Taka", "Intercept", "Relentless"], psCaps: [7, 7, 7, 7], plus: ["Technical", "Rapid", "Pinged Pass"], plusCaps: [3, 3, 3], exp: true, pos: "LM", maxRating: 90, ovrBoost: "+25", ovrCap: 92 },  // AUTO-ADDED (expired)
         { name: "Goal Bound", ps: ["Finesse Shot", "Gamechanger", "Chip Shot", "Acrobatic", "Precision Header", "Power Shot"], psCaps: [8, 8, 8, 8, 8, 8], plus: ["Low Driven Shot"], plusCaps: [2], exp: true },  // AUTO-ADDED (expired)
         { name: "Smooth Operator", ps: ["Technical", "Press Proven", "Intercept"], psCaps: [7, 7, 7], plus: ["First Touch"], plusCaps: [3], exp: true, maxRating: 89, ovrBoost: "+1" },  // AUTO-ADDED (expired)
@@ -842,6 +852,7 @@
         { name: "Rising Guard", ps: [], plus: [], exp: true, maxRating: 82 },  // AUTO-ADDED (expired)
 
            
+    
     
     
     
